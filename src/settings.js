@@ -1,6 +1,5 @@
 module.exports = {
-  title: 'Vue Element Admin',
-
+  title: 'questionnaire',
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel
