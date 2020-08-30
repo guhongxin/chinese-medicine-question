@@ -17,9 +17,6 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="form.keepPassword">记住密码</el-checkbox>
-        </el-form-item>
-        <el-form-item>
           <el-button type="success" class="login-btn">登录</el-button>
         </el-form-item>
       </el-form>
