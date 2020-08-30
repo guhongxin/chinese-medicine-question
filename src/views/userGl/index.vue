@@ -10,7 +10,11 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="医院类别：">
-              <el-select v-model="form.hospitalType" placeholder="请选择活动区域" clearable>
+              <el-select
+                v-model="form.hospitalType"
+                placeholder="请选择活动区域"
+                clearable
+              >
                 <el-option
                   v-for="(item, key) in hospitalTypeOptions"
                   :key="key"
@@ -22,7 +26,11 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="医院等级：">
-              <el-select v-model="form.hospitalGrade" placeholder="请选择活动区域" clearable>
+              <el-select
+                v-model="form.hospitalGrade"
+                placeholder="请选择活动区域"
+                clearable
+              >
                 <el-option
                   v-for="(item, key) in hospitalGradeOptions"
                   :key="key"
@@ -50,7 +58,11 @@
           </el-col>
           <el-col :span="7">
             <el-form-item label="问卷状态：">
-              <el-select v-model="form.hospitalGrade" placeholder="请选择活动区域" clearable>
+              <el-select
+                v-model="form.hospitalGrade"
+                placeholder="请选择活动区域"
+                clearable
+              >
                 <el-option
                   v-for="(item, key) in stateOptions"
                   :key="key"
@@ -70,38 +82,73 @@
         style="width: 100%"
         border
         class="checktable"
+        size="small"
+        element-loading-text="列表正在加载中"
+        fit
       >
-        <el-table-column label="ID" />
-        <el-table-column label="医院类别" />
-        <el-table-column label="医院等级" />
-        <el-table-column label="负责人姓名" />
-        <el-table-column label="联系电话" />
-        <el-table-column label="问卷状态" />
-        <el-table-column>
+        <el-table-column label="ID" align="center" />
+        <el-table-column label="医院类别" align="center" />
+        <el-table-column label="医院等级" align="center" />
+        <el-table-column label="负责人姓名" align="center" />
+        <el-table-column label="联系电话" align="center" />
+        <el-table-column label="问卷状态" align="center" />
+        <el-table-column width="200" fixed="right" align="center">
           <template>
-            <span class="span-btn">详情</span>
+            <span class="span-btn" @click="userDetails">详情</span>
             <span class="span-btn">查看问卷</span>
             <span class="span-btn">导出问卷</span>
           </template>
         </el-table-column>
       </el-table>
+      <div class="pagination-container" style="text-align:right;">
+        <el-pagination
+          background
+          :current-page.sync="listQuery.page"
+          :page-sizes="[30, 50, 70, 100, 200]"
+          :page-size="listQuery.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </div>
+    <userDailog ref="userDailogDoc" />
   </div>
 </template>
 <script>
+import userDailog from "./popup/userDailog"
 export default {
+  components: {
+    userDailog
+  },
   data() {
     return {
-      tableData: [{
-        name: 'sna'
-      }],
+      tableData: [
+        {
+          name: 'sna'
+        }
+      ],
       form: {
         hospitalType: '',
         hospitalGrade: ''
       },
       hospitalTypeOptions: ['中医医院', '中西医结合医院'],
       hospitalGradeOptions: ['三甲', '三乙', '二甲', '二乙', '一级', '未定级'],
-      stateOptions: ['已提交', '未提交']
+      stateOptions: ['已提交', '未提交'],
+      listQuery: {
+        page: 1,
+        pageSize: 10
+      },
+      total: 0
+    }
+  },
+  methods: {
+    handleSizeChange() {},
+    handleCurrentChange() {},
+    userDetails() {
+      //
+      this.$refs.userDailogDoc.showModule()
     }
   }
 }
@@ -119,7 +166,7 @@ export default {
 }
 .span-btn {
   cursor: pointer;
-  color: #409EFF;
+  color: #409eff;
 }
 .checktable {
   .has-gutter {
