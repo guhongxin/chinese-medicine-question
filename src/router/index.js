@@ -34,17 +34,6 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-    path: '/redirect',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
-  },
-  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
@@ -65,11 +54,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
-    hidden: true
-  },
-  {
     path: '/404',
     component: () => import('@/views/error-page/404'),
     hidden: true
@@ -82,48 +66,19 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/userGl',
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-      }
-    ]
-  }, {
-    path: '/userGl',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
+        path: '/userGl',
         component: () => import('@/views/userGl/index'),
         name: 'userGl',
         meta: { title: '用户管理', icon: 'user', noCache: true }
-      }
-    ]
-  },
-  {
-    path: '/accountGl',
-    component: Layout,
-    children: [
+      },
       {
-        path: 'index',
+        path: '/accountGl',
         component: () => import('@/views/accountGl/index'),
         name: 'accountGl',
         meta: { title: '账号管理', icon: 'peoples', noCache: true }
-      }
-    ]
-  }, {
-    path: '/error-log',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: 'Error Log', icon: 'bug' }
       }
     ]
   },
@@ -140,9 +95,9 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
-}
+// export function resetRouter() {
+//   const newRouter = createRouter()
+//   router.matcher = newRouter.matcher // reset router
+// }
 
 export default router

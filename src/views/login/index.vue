@@ -69,7 +69,6 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.form).then(res => {
             this.loading = false
-            console.log('----', res)
             if (res.rolename === 'admin user') {
               // 管理员
               this.$router.push({ path: '/userGl' })

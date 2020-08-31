@@ -32,12 +32,15 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
+    const fomdata = new FormData()
+    fomdata.append('username', username.trim())
+    fomdata.append('password', password)
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login(fomdata).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+        commit('SET_TOKEN', data.hash)
+        setToken(data.hash)
+        resolve(data)
       }).catch(error => {
         reject(error)
       })
@@ -65,6 +68,7 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
+        debugger
         resolve(data)
       }).catch(error => {
         reject(error)
