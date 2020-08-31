@@ -2,22 +2,22 @@
   <div class="login">
     <div class="login-content">
       <div class="title">中医药互联网+问卷调查系统</div>
-      <el-form ref="form" :model="form">
-        <el-form-item>
+      <el-form ref="form" :model="form" :rules="loginRules">
+        <el-form-item prop="username">
           <el-input
-            v-model="form.userName"
+            v-model="form.username"
             placeholder="用户"
           >
             <i slot="prefix" class="el-input__icon el-icon-s-custom" />
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input v-model="form.password" placeholder="密码">
             <i slot="prefix" class="el-input__icon el-icon-lock" />
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="success" class="login-btn">登录</el-button>
+          <el-button type="success" class="login-btn" :loading="loading" @click="login">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -25,21 +25,20 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
 export default {
   name: 'Login',
   components: { },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      if (!value) {
+        callback(new Error('请输入用户名！'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码长度不能少于6位！'))
       } else {
         callback()
       }
@@ -47,98 +46,43 @@ export default {
     return {
       form: {
         username: 'admin',
-        password: '111111'
+        password: '123456'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
-      }
-    }
-  },
-  watch: {
-    $route: {
-      handler: function(route) {
-        const query = route.query
-        if (query) {
-          this.redirect = query.redirect
-          this.otherQuery = this.getOtherQuery(query)
-        }
       },
-      immediate: true
+      loading: false
     }
   },
   created() {
     // window.addEventListener('storage', this.afterQRScan)
   },
-  mounted() {
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
-    } else if (this.loginForm.password === '') {
-      this.$refs.password.focus()
-    }
-  },
+  mounted() {},
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
-    checkCapslock(e) {
-      const { key } = e
-      this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
-    },
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
-    },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    login() {
+      this.$refs.form.validate((valid) => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
+          this.$store.dispatch('user/login', this.form).then(res => {
+            this.loading = false
+            console.log('----', res)
+            if (res.rolename === 'admin user') {
+              // 管理员
+              this.$router.push({ path: '/userGl' })
+            } else {
+              // 不是管理员
+            }
+          }).catch(err => {
+            console.log(err)
+            this.loading = false
+          })
         }
       })
-    },
-    getOtherQuery(query) {
-      return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== 'redirect') {
-          acc[cur] = query[cur]
-        }
-        return acc
-      }, {})
     }
-    // afterQRScan() {
-    //   if (e.key === 'x-admin-oauth-code') {
-    //     const code = getQueryObject(e.newValue)
-    //     const codeMap = {
-    //       wechat: 'code',
-    //       tencent: 'code'
-    //     }
-    //     const type = codeMap[this.auth_type]
-    //     const codeName = code[type]
-    //     if (codeName) {
-    //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-    //         this.$router.push({ path: this.redirect || '/' })
-    //       })
-    //     } else {
-    //       alert('第三方登录失败')
-    //     }
-    //   }
-    // }
   }
 }
 </script>
@@ -150,7 +94,7 @@ export default {
   justify-content: center;
   .login-content {
     width: 300px;
-    margin-top: 100px;
+    margin-top: 15%;
     .title {
       text-align: center;
       font-size: 18px;

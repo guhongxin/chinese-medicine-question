@@ -117,7 +117,7 @@
   </div>
 </template>
 <script>
-import userDailog from "./popup/userDailog"
+import userDailog from './popup/userDailog'
 export default {
   components: {
     userDailog
