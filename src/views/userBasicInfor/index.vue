@@ -12,6 +12,7 @@
 <script>
 import BasicInfor from '@/components/BasicInfor'
 import { organizationSaveOz } from '@/api/usergl'
+import { getCookie } from '@/utils/auth'
 export default {
   components: {
     BasicInfor
@@ -66,13 +67,17 @@ export default {
 
       if (!this.errMsg) {
         // 没有错误填写机构信息
-        this.organizationSaveOzApi(_form)
+        const userId = getCookie('userId')
+        const obj = Object.assign({}, _form, {
+          userId
+        })
+        this.organizationSaveOzApi(obj)
       }
       console.log(this.$refs.basicInforDoc.form)
     },
     organizationSaveOzApi(param) {
       this.organizationSaveOz = true
-      organizationSaveOz().then(res => {
+      organizationSaveOz(param).then(res => {
         this.organizationSaveOz = false
         this.$message({
           type: 'success',
