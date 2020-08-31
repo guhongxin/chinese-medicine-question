@@ -113,15 +113,72 @@
         </td>
       </tr>
       <tr>
+        <td style="text-align: center;">
+          健康
+        </td>
+        <td width="40%">是否实现“两卡融合”</td>
+        <td>
+          <el-radio-group v-model="data1.field10">
+            <el-radio label="是" />
+            <el-radio label="否" />
+          </el-radio-group>
+        </td>
+        <td>
+          <el-radio-group v-model="data2.field10">
+            <el-radio label="是" />
+            <el-radio label="否" />
+          </el-radio-group>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: center;" rowspan="2">
+          医保卡
+        </td>
+        <td width="40%">健康医保卡使用人次</td>
+        <td>
+          <el-input v-model="data1.field11" size="small" style="width:100px" />
+        </td>
+        <td>
+          <el-input v-model="data2.field11" size="small" style="width:100px" />
+        </td>
+      </tr>
+      <tr>
+        <td width="40%">健康医保卡使用占就诊人次比例</td>
+        <td>
+          <el-input v-model="data1.field12" size="small" style="width:100px" />
+        </td>
+        <td>
+          <el-input v-model="data2.field12" size="small" style="width:100px" />
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">
+          现场排队
+        </td>
+        <td width="40%">高峰期现场排队时间</td>
+        <td>
+          <el-input v-model="data1.field13" size="small" style="width:100px" />
+        </td>
+        <td>
+          <el-input v-model="data2.field13" size="small" style="width:100px" />
+        </td>
+      </tr>
+      <tr>
         <td style="text-align: center;" rowspan="9">
-          门诊预约
+          门诊结算
         </td>
-        <td width="40%"> 普通、专科和专家门诊号源网上开放比例</td>
+        <td width="40%">是否开展门诊智慧结算</td>
         <td>
-          <el-input v-model="data1.field1" size="small" />
+          <el-radio-group v-model="data1.field14">
+            <el-radio label="是" />
+            <el-radio label="否" />
+          </el-radio-group>
         </td>
         <td>
-          <el-input v-model="data2.field1" size="small" />
+          <el-radio-group v-model="data1.field14">
+            <el-radio label="是" />
+            <el-radio label="否" />
+          </el-radio-group>
         </td>
       </tr>
     </table>
