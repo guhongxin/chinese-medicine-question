@@ -69,12 +69,12 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.form).then(res => {
             this.loading = false
-            if (!(res.rolename === 'admin user')) {
+            if (res.rolename === 'admin user') {
               // 管理员
               this.$router.push({ path: '/userGl' })
             } else {
               // 不是管理员,并且机构信息未提交跳转到填写信息页面
-              if (res.status === '1') {
+              if (res.status === '0') {
                 this.$router.push({ path: '/userBasicInfor' })
               }
             }
