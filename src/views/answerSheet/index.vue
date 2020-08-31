@@ -175,6 +175,29 @@
           </el-radio-group>
         </td>
         <td>
+          <el-radio-group v-model="data2.field14">
+            <el-radio label="是" />
+            <el-radio label="否" />
+          </el-radio-group>
+        </td>
+      </tr>
+      <tr>
+        <td width="40%">智慧结算方式</td>
+        <td>
+          <el-radio-group v-model="data1.field14">
+            <el-radio label="是" />
+            <el-radio label="否" />
+          </el-radio-group>
+
+          <el-checkbox-group v-model="data2.field2">
+            <el-checkbox
+              v-for="(item, key) in options2"
+              :key="key"
+              :label="item"
+            />
+          </el-checkbox-group>
+        </td>
+        <td>
           <el-radio-group v-model="data1.field14">
             <el-radio label="是" />
             <el-radio label="否" />
@@ -202,6 +225,26 @@ export default {
         field2: [],
         field3: ''
       },
+      tabdata: [{
+        name: '门诊预约',
+        child: [
+          [
+            '普通、专科和专家门诊号源网上开放比例', '开展哪些预约诊疗方式', '实现分时段精准预约（每个时段精确到30分钟以内）', '网上预约人次数',
+            '预约患者按时就诊人次数', '网上预约专家号人次数', '预约专家号的患者按时就诊人次数', '网上预约普通号人次数', '预约普通号的患者按时就诊人次数'
+          ],
+          [
+            { type: 0, options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约'] },
+            { type: 1, options: ['是', '否'] },
+            { type: 2 },
+            { type: 0 },
+            { type: 0 },
+            { type: 0 },
+            { type: 0 },
+            { type: 0 },
+            { type: 0 }
+          ]
+        ]
+      }],
       options2: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约']
     }
   },
