@@ -74,11 +74,12 @@
         />
       </div>
     </div>
-    <operationDailog ref="operationDailogDoc" />
+    <operationDailog ref="operationDailogDoc" @saveBtn="saveBtn" />
   </div>
 </template>
 <script>
 import operationDailog from './popup/operationDailog'
+import { addUser } from '@/api/usergl.js'
 export default {
   components: {
     operationDailog
@@ -115,7 +116,23 @@ export default {
       this.$refs.operationDailogDoc.showModule(obj)
     },
     handleSizeChange() {},
-    handleCurrentChange() {}
+    handleCurrentChange() {},
+    saveBtn(param) {
+      // 添加用户
+      this.addUserApi(param)
+    },
+    addUserApi(param) {
+      addUser(param).then(res => {
+        this.$message({
+          type: 'success',
+          message: '添加用户成功!'
+        })
+        this.$refs.operationDailogDoc.handleClose()
+      }).catch(err => {
+        console.log(err)
+        this.$refs.operationDailogDoc.btnloading = false
+      })
+    }
   }
 }
 </script>

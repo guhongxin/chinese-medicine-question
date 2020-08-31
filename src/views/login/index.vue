@@ -25,24 +25,24 @@
 </template>
 
 <script>
+const validateUsername = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('请输入用户名！'))
+  } else {
+    callback()
+  }
+}
+const validatePassword = (rule, value, callback) => {
+  if (value.length < 6) {
+    callback(new Error('密码长度不能少于6位！'))
+  } else {
+    callback()
+  }
+}
 export default {
   name: 'Login',
   components: { },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入用户名！'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码长度不能少于6位！'))
-      } else {
-        callback()
-      }
-    }
     return {
       form: {
         username: 'admin',
@@ -69,11 +69,14 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.form).then(res => {
             this.loading = false
-            if (res.rolename === 'admin user') {
+            if (!(res.rolename === 'admin user')) {
               // 管理员
               this.$router.push({ path: '/userGl' })
             } else {
-              // 不是管理员
+              // 不是管理员,并且机构信息未提交跳转到填写信息页面
+              if (res.status === '1') {
+                this.$router.push({ path: '/userBasicInfor' })
+              }
             }
           }).catch(err => {
             console.log(err)
