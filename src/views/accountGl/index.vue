@@ -49,10 +49,10 @@
       >
         <el-table-column label="ID" align="center" prop="id" />
         <el-table-column label="账号" align="center" prop="username" />
-        <el-table-column label="密码" align="center" />
+        <el-table-column label="密码" align="center" prop="password" />
         <el-table-column label="机构名称" align="center" prop="organization_name" />
-        <el-table-column label="医院类别" align="center" />
-        <el-table-column label="医院名等级" align="center" />
+        <el-table-column label="医院类别" align="center" prop="organization_category" />
+        <el-table-column label="医院名等级" align="center" prop="organization_level" />
         <el-table-column label="负责人" align="center" prop="charge_person_name" />
         <el-table-column label="联系电话" align="center" prop="charge_person_phone" />
         <el-table-column width="200" fixed="right" align="center">

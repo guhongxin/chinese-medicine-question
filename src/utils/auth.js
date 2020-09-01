@@ -24,3 +24,6 @@ export function setCookie(Key, value) {
 export function removeCookie(Key) {
   return sessionStorage.removeItem(Key)
 }
+export function clearCookie(Key) {
+  return sessionStorage.clear()
+}
