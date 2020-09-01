@@ -4,14 +4,14 @@
       <el-form ref="form" :model="form" label-width="100px" size="small">
         <el-row :gutter="8">
           <el-col :span="7">
-            <el-form-item label="机构名称：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="机构名称：" prop="organizationName">
+              <el-input v-model="form.organizationName" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="医院类别：">
+            <el-form-item label="医院类别：" prop="organizationCategory">
               <el-select
-                v-model="form.hospitalType"
+                v-model="form.organizationCategory"
                 placeholder="请选择活动区域"
                 clearable
               >
@@ -25,9 +25,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="医院等级：">
+            <el-form-item label="医院等级：" prop="organizationLevel">
               <el-select
-                v-model="form.hospitalGrade"
+                v-model="form.organizationLevel"
                 placeholder="请选择活动区域"
                 clearable
               >
@@ -42,25 +42,24 @@
           </el-col>
           <el-col :span="3">
             <div class="btn-group">
-              <el-button type="primary" size="small">查询</el-button>
-              <el-button type="primary" size="small">重置</el-button>
+              <el-button type="primary" size="small" :loading="searchLoading" @click="search">查询</el-button>
+              <el-button type="primary" size="small" @click="restFrom">重置</el-button>
             </div>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="负责人姓名：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="负责人姓名：" prop="chargePersonName">
+              <el-input v-model="form.chargePersonName" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="联系电话：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="联系电话：" prop="chargePersonPhone">
+              <el-input v-model="form.chargePersonPhone" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="问卷状态：">
+            <el-form-item label="问卷状态：" prop="hospitalGrade">
               <el-select
-                v-model="form.hospitalGrade"
-                placeholder="请选择活动区域"
+                v-model="form.questionnaireStatus"
                 clearable
               >
                 <el-option
@@ -130,25 +129,48 @@ export default {
         }
       ],
       form: {
-        hospitalType: '',
-        hospitalGrade: ''
+        organizationName: '',
+        organizationCategory: '',
+        organizationLevel: '',
+        chargePersonName: '',
+        chargePersonPhone: '',
+        questionnaireStatus: ''
       },
       hospitalTypeOptions: ['中医医院', '中西医结合医院'],
       hospitalGradeOptions: ['三甲', '三乙', '二甲', '二乙', '一级', '未定级'],
       stateOptions: ['已提交', '未提交'],
       listQuery: {
         page: 1,
-        pageSize: 10
+        size: 10
       },
-      total: 0
+      total: 0,
+      searchLoading: false
     }
   },
   methods: {
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    search() {
+      this.searchLoading = true
+      this.listQuery = Object.assign({}, this.listQuery, this.form)
+      this.getList()
+    },
+    restFrom() {
+      // 重置
+      this.$refs['form'].resetFields()
+    },
+    handleSizeChange(val) {
+      this.listQuery.size = val
+      this.getList()
+    },
+    handleCurrentChange() {
+      this.getList()
+    },
     userDetails() {
-      //
+      // 查看用户机构
       this.$refs.userDailogDoc.showModule()
+    },
+    getList() {
+      const obj = Object.assign({}, this.listQuery)
+      console.log('obj', obj)
     }
   }
 }
