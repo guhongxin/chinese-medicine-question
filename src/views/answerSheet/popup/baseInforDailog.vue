@@ -50,7 +50,6 @@ export default {
       // 获取机构信息
       organizationGetOz(param).then(res => {
         const data = res.data
-        // this.userId = data.user_id
         this.basicInfor = data.organization
       }).catch(err => {
         console.log(err)
@@ -119,6 +118,7 @@ export default {
           type: 'success',
           message: '修改机构信息成功!'
         })
+        this.handleClose()
       }).catch(() => {
         this.saveLoading = false
       })

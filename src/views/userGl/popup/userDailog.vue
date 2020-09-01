@@ -50,7 +50,7 @@ export default {
       // 获取机构信息
       organizationGetOz(param).then(res => {
         const data = res.data
-        this.userId = data.user_id
+        this.userId = data.organization.user_id
         this.basicInfor = data.organization
       }).catch(err => {
         console.log(err)
@@ -81,7 +81,7 @@ export default {
         chargePersonName: '请填写总负责人姓名',
         chargePersonPhone: '请填写联系电话'
       }
-      const _form = this.$refs.basicInforDoc.form
+      const _form = JSON.parse(JSON.stringify(this.$refs.basicInforDoc.form))
       const Keys = Object.keys(errMsg)
       for (let i = 0; i < Keys.length; i++) {
         if (Keys[i] === 'organizationCategory' || Keys[i] === 'organizationLevel') {
@@ -119,6 +119,7 @@ export default {
           type: 'success',
           message: '修改机构信息成功!'
         })
+        this.handleClose()
       }).catch(() => {
         this.saveLoading = false
       })
