@@ -1,7 +1,8 @@
 import router from './router'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken } from '@/utils/auth' // get token from cookie
+import { getToken, getCookie } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -25,9 +26,26 @@ router.beforeEach(async(to, from, next) => {
       NProgress.done()
     } else {
       // determine whether the user has obtained his permission roles through getInfo
-      console.log('to', to)
-      console.log('from', from)
-      next()
+      const roleName = getCookie('rolename')
+      if (roleName === 'admin user') {
+        // 管理员
+        const stopRoute = ['/userBasicInfor', '/answerSheet']
+        if (stopRoute.indexOf(to.path) !== -1) {
+          errMsg('该用户暂无权限')
+          next('/404')
+        } else {
+          next()
+        }
+      } else {
+        // 普通用户
+        const stopRoute = ['/', '/userGl', '/accountGl']
+        if (stopRoute.indexOf(to.path) !== -1) {
+          errMsg('该用户暂无权限')
+          next('/404')
+        } else {
+          next()
+        }
+      }
     }
   } else {
     /* has no token*/
@@ -47,3 +65,11 @@ router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
+
+function errMsg(msg) {
+  Message({
+    message: msg,
+    type: 'error',
+    duration: 5 * 1000
+  })
+}

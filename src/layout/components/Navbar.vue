@@ -21,11 +21,14 @@
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
           <!-- <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar"> -->
-          <img src="../../assets/img/logout.png" class="user-avatar">
+          <div class="avatar-wrapper-box">
+            <img src="../../assets/img/logout.png" class="user-avatar" @click="logout">
+          </div>
           <!-- <i class="el-icon-caret-bottom" /> -->
         </div>
-        <el-dropdown-menu slot="dropdown">
-          <!-- <router-link to="/profile/index">
+        <el-dropdown-menu slot="dropdown" />
+        <!-- <el-dropdown-menu slot="dropdown">
+          <router-link to="/profile/index">
             <el-dropdown-item>Profile</el-dropdown-item>
           </router-link>
           <router-link to="/">
@@ -36,11 +39,11 @@
           </a>
           <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
             <el-dropdown-item>Docs</el-dropdown-item>
-          </a> -->
+          </a>
           <el-dropdown-item @click.native="logout">
             <span style="display:block;">退出</span>
           </el-dropdown-item>
-        </el-dropdown-menu>
+        </el-dropdown-menu> -->
       </el-dropdown>
     </div>
   </div>
@@ -143,8 +146,8 @@ export default {
         .user-avatar {
           cursor: pointer;
           border-radius: 10px;
-          width: 30px;
-          height: 30px;
+          width: 20px;
+          height: 20px;
           border-radius: 10px;
           display: block;
           margin-top: 9px;
@@ -160,5 +163,12 @@ export default {
       }
     }
   }
+}
+.avatar-wrapper-box {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

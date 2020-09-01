@@ -137,6 +137,10 @@ export default {
   watch: {
     initialData: {
       handler(val) {
+        if (!val.organization_name) {
+          // 判断是否有初始值
+          return false
+        }
         this.form = {
           organizationName: val.organization_name,
           organizationCategoryCode: val.organization_category_code,

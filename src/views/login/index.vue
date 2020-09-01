@@ -73,9 +73,12 @@ export default {
               // 管理员
               this.$router.push({ path: '/userGl' })
             } else {
-              // 不是管理员,并且机构信息未提交跳转到填写信息页面
+              // 不是管理员,并且机构信息未提交跳转到填写信息页面，已填写跳转到问卷
+
               if (res.status === '0') {
                 this.$router.push({ path: '/userBasicInfor' })
+              } else {
+                this.$router.push({ path: '/answerSheet' })
               }
             }
           }).catch(err => {
