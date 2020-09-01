@@ -101,7 +101,7 @@
         <el-table-column width="200" fixed="right" align="center">
           <template slot-scope="scope">
             <span class="span-btn" @click="userDetails(scope.row)">详情</span>
-            <span class="span-btn">查看问卷</span>
+            <span class="span-btn" @click="viewquestionnaire(scope.row)">查看问卷</span>
             <span class="span-btn">导出问卷</span>
           </template>
         </el-table-column>
@@ -120,14 +120,17 @@
       </div>
     </div>
     <userDailog ref="userDailogDoc" />
+    <questionnairedetails ref="questionnairedetailsDoc" />
   </div>
 </template>
 <script>
 import userDailog from './popup/userDailog'
+import questionnairedetails from './popup/questionnairedetails'
 import { questionnaireGetList } from '@/api/usergl'
 export default {
   components: {
-    userDailog
+    userDailog,
+    questionnairedetails
   },
   data() {
     return {
@@ -180,7 +183,6 @@ export default {
     },
     getList() {
       const obj = Object.assign({}, this.listQuery)
-      console.log('obj', obj)
       this.tableLoading = true
       questionnaireGetList(obj).then(res => {
         this.tableLoading = false
@@ -192,6 +194,9 @@ export default {
         this.tableLoading = false
         this.searchLoading = false
       })
+    },
+    viewquestionnaire(row) {
+      this.$refs.questionnairedetailsDoc.showModule(row)
     }
   }
 }
@@ -223,5 +228,8 @@ export default {
 }
 .status1 {
   color: #409EFF;
+}
+.span-btn {
+  margin-right: 10px;
 }
 </style>

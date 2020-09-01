@@ -52,7 +52,17 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-
+      if (res.code === 30007) {
+        MessageBox.confirm('您已注销，您可以取消停留在该页上，或重新登录', '注销', {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
+        })
+      }
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
