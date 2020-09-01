@@ -99,8 +99,8 @@
           </template>
         </el-table-column>
         <el-table-column width="200" fixed="right" align="center">
-          <template>
-            <span class="span-btn" @click="userDetails">详情</span>
+          <template slot-scope="scope">
+            <span class="span-btn" @click="userDetails(scope.row)">详情</span>
             <span class="span-btn">查看问卷</span>
             <span class="span-btn">导出问卷</span>
           </template>
@@ -174,9 +174,9 @@ export default {
       // 页码改变
       this.getList()
     },
-    userDetails() {
+    userDetails(row) {
       // 查看用户机构
-      this.$refs.userDailogDoc.showModule()
+      this.$refs.userDailogDoc.showModule(row)
     },
     getList() {
       const obj = Object.assign({}, this.listQuery)

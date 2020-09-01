@@ -58,7 +58,7 @@
         <el-table-column width="200" fixed="right" align="center">
           <template slot-scope="scope">
             <span class="span-btn" @click="editClick(scope.row)">编辑</span>
-            <span class="span-btn">删除</span>
+            <span class="span-btn" @click="deleteClick(scope.row)">删除</span>
           </template>
         </el-table-column>
       </el-table>
@@ -80,7 +80,7 @@
 </template>
 <script>
 import operationDailog from './popup/operationDailog'
-import { addUser, editUser, userGetList } from '@/api/usergl.js'
+import { addUser, editUser, userGetList, delUser } from '@/api/usergl.js'
 export default {
   components: {
     operationDailog
@@ -205,6 +205,33 @@ export default {
       }).catch(() => {
         this.tableLoading = false
         this.searchLoading = false
+      })
+    },
+    delUserApi(param) {
+      // 删除
+      delUser(param).then(res => {
+        this.$message({
+          type: 'success',
+          message: '删除账号成功！'
+        })
+        this.getList()
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    deleteClick(row) {
+      // 删除确定按钮
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const obj = {
+          userId: row.id
+        }
+        this.delUserApi(obj)
+      }).catch(() => {
+        return false
       })
     }
   }

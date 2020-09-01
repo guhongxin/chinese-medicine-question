@@ -41,6 +41,8 @@ const actions = {
         commit('SET_TOKEN', data.hash)
         setToken(data.hash)
         setCookie('userId', data.id)
+        setCookie('rolename', data.rolename)
+        setCookie('status', data.status)
         resolve(data)
       }).catch(error => {
         reject(error)

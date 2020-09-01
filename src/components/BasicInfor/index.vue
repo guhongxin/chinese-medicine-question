@@ -103,6 +103,14 @@
 </template>
 <script>
 export default {
+  props: {
+    initialData: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       form: {
@@ -124,6 +132,33 @@ export default {
         chargePersonName: '',
         chargePersonPhone: ''
       }
+    }
+  },
+  watch: {
+    initialData: {
+      handler(val) {
+        this.form = {
+          organizationName: val.organization_name,
+          organizationCategoryCode: val.organization_category_code,
+          organizationLicenseNum: val.organization_license_num,
+          organizationCategory: val.organization_category ? val.organization_category.split(',') : [],
+          organizationLevel: val.organization_level ? val.organization_level.split(',') : [],
+          annualOutpatientEmergencyNum: val.annual_outpatient_emergency_num,
+          annualOutpatientNum: val.annual_outpatient_num,
+          annualEmergencyNum: val.annual_emergency_num,
+          annualOutpatientAppointmentRate: val.annual_outpatient_appointment_rate,
+          chineseMedicineNum: val.chinese_medicine_num,
+          chinesePharmacistNum: val.chinese_pharmacist_num,
+          tcmTechniciansProportion: val.tcm_technicians_proportion,
+          authorizedBedNum: val.authorized_bed_num,
+          actualBedNum: val.actual_bed_num,
+          annualDischargeNum: val.annual_discharge_num,
+          chargePersonName: val.charge_person_name,
+          chargePersonPhone: val.charge_person_phone
+        }
+      },
+      deep: true,
+      immediate: true
     }
   }
 }

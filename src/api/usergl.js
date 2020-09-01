@@ -24,7 +24,14 @@ export function editUser(data) {
     data
   })
 }
-
+// 删除列表
+export function delUser(data) {
+  return request({
+    url: '/user/delUser',
+    method: 'POST',
+    data
+  })
+}
 // 用户列表
 export function questionnaireGetList(data) {
   return request({
