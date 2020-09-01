@@ -59,20 +59,37 @@ export default {
   },
   methods: {
     handleClose() {
+      this.flag = null
+      this.userId = null
       this.$refs.form.resetFields()
       this.btnloading = true
       this.dialogVisible = false
     },
     showModule(param) {
+      console.log('param', param)
       this.btnloading = false
+      this.flag = param.flag // 1-编辑
       this.title = param.title
       this.dialogVisible = true
+      if (this.flag === 1) {
+        // 回显内容
+        this.form = {
+          username: param.row.username,
+          password: param.row.password,
+          organizationName: param.row.organization_name
+        }
+        this.userId = param.row.id
+      }
     },
     saveBtn() {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.btnloading = true
-          this.$emit('saveBtn', this.form)
+          const obj = Object.assign({}, this.form, {
+            flag: this.flag,
+            userId: this.userId
+          })
+          this.$emit('saveBtn', obj)
         }
       })
     },

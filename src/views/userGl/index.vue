@@ -14,6 +14,7 @@
                 v-model="form.organizationCategory"
                 placeholder="请选择活动区域"
                 clearable
+                style="width:100%"
               >
                 <el-option
                   v-for="(item, key) in hospitalTypeOptions"
@@ -24,7 +25,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="7">
+          <el-col :span="6">
             <el-form-item label="医院等级：" prop="organizationLevel">
               <el-select
                 v-model="form.organizationLevel"
@@ -40,7 +41,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="4">
             <div class="btn-group">
               <el-button type="primary" size="small" :loading="searchLoading" @click="search">查询</el-button>
               <el-button type="primary" size="small" @click="restFrom">重置</el-button>
@@ -57,7 +58,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="7">
-            <el-form-item label="问卷状态：" prop="hospitalGrade">
+            <el-form-item label="问卷状态：" prop="questionnaireStatus">
               <el-select
                 v-model="form.questionnaireStatus"
                 clearable
@@ -76,6 +77,7 @@
     </div>
     <div class="tabbox">
       <el-table
+        v-loading="tableLoading"
         :data="tableData"
         stripe
         style="width: 100%"
@@ -85,12 +87,17 @@
         element-loading-text="列表正在加载中"
         fit
       >
-        <el-table-column label="ID" align="center" />
-        <el-table-column label="医院类别" align="center" />
-        <el-table-column label="医院等级" align="center" />
-        <el-table-column label="负责人姓名" align="center" />
-        <el-table-column label="联系电话" align="center" />
-        <el-table-column label="问卷状态" align="center" />
+        <el-table-column label="ID" align="center" prop="id" />
+        <el-table-column label="机构名称" align="center" prop="organization_name" />
+        <el-table-column label="医院类别" align="center" prop="organization_category" />
+        <el-table-column label="医院等级" align="center" prop="organization_level" />
+        <el-table-column label="负责人姓名" align="center" prop="charge_person_name" />
+        <el-table-column label="联系电话" align="center" prop="charge_person_phone" />
+        <el-table-column label="问卷状态" align="center" prop="status">
+          <template slot-scope="scope">
+            <span :class="`status${scope.row.status}`">{{ scope.row.status === '1' ? '已提交': '暂存' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column width="200" fixed="right" align="center">
           <template>
             <span class="span-btn" @click="userDetails">详情</span>
@@ -103,7 +110,7 @@
         <el-pagination
           background
           :current-page.sync="listQuery.page"
-          :page-sizes="[30, 50, 70, 100, 200]"
+          :page-sizes="[10, 50, 70, 100, 200]"
           :page-size="listQuery.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -117,17 +124,14 @@
 </template>
 <script>
 import userDailog from './popup/userDailog'
+import { questionnaireGetList } from '@/api/usergl'
 export default {
   components: {
     userDailog
   },
   data() {
     return {
-      tableData: [
-        {
-          name: 'sna'
-        }
-      ],
+      tableData: [],
       form: {
         organizationName: '',
         organizationCategory: '',
@@ -144,8 +148,12 @@ export default {
         size: 10
       },
       total: 0,
-      searchLoading: false
+      searchLoading: false,
+      tableLoading: false
     }
+  },
+  mounted() {
+    this.getList()
   },
   methods: {
     search() {
@@ -158,10 +166,12 @@ export default {
       this.$refs['form'].resetFields()
     },
     handleSizeChange(val) {
+      // 改变每页显示条数
       this.listQuery.size = val
       this.getList()
     },
     handleCurrentChange() {
+      // 页码改变
       this.getList()
     },
     userDetails() {
@@ -171,6 +181,17 @@ export default {
     getList() {
       const obj = Object.assign({}, this.listQuery)
       console.log('obj', obj)
+      this.tableLoading = true
+      questionnaireGetList(obj).then(res => {
+        this.tableLoading = false
+        this.searchLoading = false
+        const data = res.data
+        this.tableData = data.list
+        this.total = data.total
+      }).catch(() => {
+        this.tableLoading = false
+        this.searchLoading = false
+      })
     }
   }
 }
@@ -193,8 +214,14 @@ export default {
 .checktable {
   .has-gutter {
     th {
-      background-color: red;
+      background-color: #F56C6C;
     }
   }
+}
+.status0 {
+  color: #F56C6C;
+}
+.status1 {
+  color: #409EFF;
 }
 </style>

@@ -4,32 +4,32 @@
       <el-form ref="form" :model="form" label-width="100px" size="small">
         <el-row :gutter="8">
           <el-col :span="6">
-            <el-form-item label="机构名称：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="机构名称：" prop="organizationName">
+              <el-input v-model="form.organizationName" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="账号：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="账号：" prop="username">
+              <el-input v-model="form.username" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="负责人姓名：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="负责人姓名：" prop="chargePersonName">
+              <el-input v-model="form.chargePersonName" clearable />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <div class="btn-group">
-              <el-button type="primary" size="small">查询</el-button>
-              <el-button type="info" size="small">重置</el-button>
+              <el-button type="primary" size="small" :loading="searchLoading" @click="search">查询</el-button>
+              <el-button type="info" size="small" @click="restFrom">重置</el-button>
               <el-button type="success" size="small" @click="addAccount">新增</el-button>
             </div>
           </el-col>
         </el-row>
         <el-row :gutter="8">
           <el-col :span="6">
-            <el-form-item label="联系电话：">
-              <el-input v-model="form.name" clearable />
+            <el-form-item label="联系电话：" prop="chargePersonPhone">
+              <el-input v-model="form.chargePersonPhone" clearable />
             </el-form-item>
           </el-col>
         </el-row>
@@ -37,6 +37,7 @@
     </div>
     <div class="tabbox">
       <el-table
+        v-loading="tableLoading"
         :data="tableData"
         stripe
         style="width: 100%"
@@ -46,17 +47,17 @@
         element-loading-text="列表正在加载中"
         fit
       >
-        <el-table-column label="ID" align="center" />
-        <el-table-column label="账号" align="center" />
+        <el-table-column label="ID" align="center" prop="id" />
+        <el-table-column label="账号" align="center" prop="username" />
         <el-table-column label="密码" align="center" />
-        <el-table-column label="机构名称" align="center" />
+        <el-table-column label="机构名称" align="center" prop="organization_name" />
         <el-table-column label="医院类别" align="center" />
         <el-table-column label="医院名等级" align="center" />
-        <el-table-column label="负责人" align="center" />
-        <el-table-column label="联系电话" align="center" />
+        <el-table-column label="负责人" align="center" prop="charge_person_name" />
+        <el-table-column label="联系电话" align="center" prop="charge_person_phone" />
         <el-table-column width="200" fixed="right" align="center">
-          <template>
-            <span class="span-btn" @click="editClick">编辑</span>
+          <template slot-scope="scope">
+            <span class="span-btn" @click="editClick(scope.row)">编辑</span>
             <span class="span-btn">删除</span>
           </template>
         </el-table-column>
@@ -65,7 +66,7 @@
         <el-pagination
           background
           :current-page.sync="listQuery.page"
-          :page-sizes="[30, 50, 70, 100, 200]"
+          :page-sizes="[10, 50, 70, 100, 200]"
           :page-size="listQuery.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
@@ -79,7 +80,7 @@
 </template>
 <script>
 import operationDailog from './popup/operationDailog'
-import { addUser } from '@/api/usergl.js'
+import { addUser, editUser, userGetList } from '@/api/usergl.js'
 export default {
   components: {
     operationDailog
@@ -87,21 +88,37 @@ export default {
   data() {
     return {
       form: {
-        hospitalType: '',
-        hospitalGrade: ''
+        organizationName: '',
+        username: '',
+        chargePersonName: '',
+        chargePersonPhone: ''
       },
-      tableData: [{}],
+      tableData: [],
       hospitalTypeOptions: ['中医医院', '中西医结合医院'],
       hospitalGradeOptions: ['三甲', '三乙', '二甲', '二乙', '一级', '未定级'],
       stateOptions: ['已提交', '未提交'],
       listQuery: {
         page: 1,
-        pageSize: 10
+        size: 10
       },
-      total: 0
+      total: 0,
+      tableLoading: false,
+      searchLoading: false
     }
   },
+  mounted() {
+    this.getList()
+  },
   methods: {
+    search() {
+      this.searchLoading = true
+      this.listQuery = Object.assign({}, this.listQuery, this.form)
+      this.getList()
+    },
+    restFrom() {
+      // 重置
+      this.$refs['form'].resetFields()
+    },
     addAccount() {
       // 新增
       const obj = {
@@ -109,28 +126,85 @@ export default {
       }
       this.$refs.operationDailogDoc.showModule(obj)
     },
-    editClick() {
+    editClick(row) {
       const obj = {
-        title: '编辑账号'
+        title: '编辑账号',
+        flag: 1,
+        row
       }
       this.$refs.operationDailogDoc.showModule(obj)
     },
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    handleSizeChange(val) {
+      // 改变每页显示条数
+      this.listQuery.size = val
+      this.getList()
+    },
+    handleCurrentChange() {
+      // 页码改变
+      this.getList()
+    },
     saveBtn(param) {
       // 添加用户
-      this.addUserApi(param)
+      if (param.flag === 1) {
+        this.editUserApi(param).then(() => {
+          this.getList()
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        this.addUserApi(param).then(() => {
+          this.getList()
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     },
     addUserApi(param) {
-      addUser(param).then(res => {
-        this.$message({
-          type: 'success',
-          message: '添加用户成功!'
+      // 添加账号
+      return new Promise((resolve, reject) => {
+        addUser(param).then(res => {
+          this.$message({
+            type: 'success',
+            message: '添加账号成功!'
+          })
+          this.$refs.operationDailogDoc.handleClose()
+          resolve()
+        }).catch(err => {
+          console.log(err)
+          this.$refs.operationDailogDoc.btnloading = false
+          reject(err)
         })
-        this.$refs.operationDailogDoc.handleClose()
-      }).catch(err => {
-        console.log(err)
-        this.$refs.operationDailogDoc.btnloading = false
+      })
+    },
+    editUserApi(param) {
+      // 编辑账号
+      return new Promise((resolve, reject) => {
+        editUser(param).then(res => {
+          this.$message({
+            type: 'success',
+            message: '编辑账号成功!'
+          })
+          this.$refs.operationDailogDoc.handleClose()
+          resolve()
+        }).catch(err => {
+          console.log(err)
+          this.$refs.operationDailogDoc.btnloading = false
+          reject(err)
+        })
+      })
+    },
+    getList() {
+      this.tableLoading = true
+      const obj = Object.assign({}, this.listQuery)
+      userGetList(obj).then(res => {
+        this.tableLoading = false
+        this.searchLoading = false
+        const data = res.data
+        this.tableData = data.list
+        this.total = data.total
+      }).catch(() => {
+        this.tableLoading = false
+        this.searchLoading = false
       })
     }
   }
