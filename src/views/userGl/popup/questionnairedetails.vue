@@ -58,67 +58,83 @@ export default {
       pushIndex: [{
         name: '按时就诊率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [4, 3]
       }, {
         name: '预约专家号的患者按时就诊率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [5, 6]
       }, {
         name: '预约普通号的患者按时就诊率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [8, 7]
       }, {
         name: '门诊智慧结算率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [16, 15]
       }, {
         name: '门诊诊间结算率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [17, 5]
       }, {
         name: '门诊自助结算率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [18, 15]
       }, {
         name: '门诊移动终端进支付结算率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [19, 15]
       }, {
         name: '病房智慧结算率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [23, 22]
       }, {
         name: '病区（床边）结算笔率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [24, 22]
       }, {
         name: '病房自助结算笔率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [25, 22]
       }, {
         name: '病房移动终端支付结算率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [26, 22]
       }, {
         name: '电子发票使用率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [29, 28]
       }, {
         name: '发票自助打印率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [30, 28]
       }, {
         name: '检查智慧预约率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [37, 36]
       }, {
         name: '检查诊间预约率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [38, 36]
       }, {
         name: '检查集中预约率',
         cz1: '',
-        cz2: ''
+        cz2: '',
+        method: [39, 36]
       }]
     }
   },
@@ -161,6 +177,10 @@ export default {
           targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex]
           itemIndex++
         }
+      }
+      for (let k = 0; k < this.pushIndex.length; k++) {
+        this.pushIndex[k]['cz1'] = sourceData['2018']['field' + this.pushIndex[k]['method'][1]] ? ((sourceData['2018']['field' + this.pushIndex[k]['method'][0]] * 100 / sourceData['2018']['field' + this.pushIndex[k]['method'][1]]).toFixed(2) + '%') : '0%'
+        this.pushIndex[k]['cz2'] = sourceData['2019']['field' + this.pushIndex[k]['method'][1]] ? ((sourceData['2019']['field' + this.pushIndex[k]['method'][0]] * 100 / sourceData['2019']['field' + this.pushIndex[k]['method'][1]]).toFixed(2) + '%') : '0%'
       }
     },
     exportExcel() {

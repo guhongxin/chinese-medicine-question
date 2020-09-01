@@ -102,7 +102,7 @@
           <template slot-scope="scope">
             <span class="span-btn" @click="userDetails(scope.row)">详情</span>
             <span class="span-btn" @click="viewquestionnaire(scope.row)">查看问卷</span>
-            <span class="span-btn">导出问卷</span>
+            <!-- <span class="span-btn">导出问卷</span> -->
           </template>
         </el-table-column>
       </el-table>
