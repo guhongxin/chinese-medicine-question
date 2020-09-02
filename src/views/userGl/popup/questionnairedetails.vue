@@ -188,14 +188,18 @@ export default {
       this.tableToExcel()
     },
     tableToExcel() {
-      const html = `<html>
-        <head>
-          <meta charset='UTF-8'>
-          <style type="text/css"></style>
-        </head>
-        <body>${document.getElementById('wtable').outerHTML}</body></html>`
+      const worksheet = this.username
+      const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset='UTF-8'><!--[if gte mso 9]><xml>
+        <x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+        <x:Name>${worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+        <style type="text/css">
+            table {border: 1px solid #000000;}
+            table tr td b {background:#FFFFFF;color:#3D3D3D;font-size:24px;border: 1px solid #000000;}
+            table th {background:#AEE1FE;color:#3D3D3D;font-size:20px;border: 1px solid #000000;}
+            table td {background:#FFFFFF;color:#3D3D3D;font-size:20px;border: 1px solid #000000;}</style>
+        </head><body><table>${document.getElementById('wtable').outerHTML}</table></body></html>`
       // 创建一个Blob对象，第一个参数是文件的数据，第二个参数是文件类型属性对象
-      const blob = new Blob([html], { type: 'application/vnd.ms-excel' })
+      const blob = new Blob([template], { type: 'application/vnd.ms-excel' })
       const a = document.createElement('a')
       // 利用URL的createObjectURL方法为元素a生成blobURL
       a.href = URL.createObjectURL(blob)

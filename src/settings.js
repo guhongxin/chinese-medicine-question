@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'questionnaire',
+  title: 'chinese-medicine-question',
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel
