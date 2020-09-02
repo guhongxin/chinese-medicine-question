@@ -202,6 +202,7 @@ export default {
       this.$refs.questionnairedetailsDoc.showModule(row)
     },
     doExport(row) {
+      console.log('kkkk', row)
       require.ensure([], () => { // 用 webpack Code Splitting xlsl还是很大的
         const tHeader = ['', '指标名称', '2018年内容', '2019年内容'] // excel 表格头
         questionnairegetQn({
@@ -261,7 +262,6 @@ export default {
               }
             }
             merges.push(_merges)
-            console.log('merges', merges)
             list1[i] = []
             list1[i][0] = scoreContent[i]['name']
             list1[i][1] = ''
@@ -273,13 +273,13 @@ export default {
               list1[i][3] = ''
             }
           }
-          const tHData = [tHeader, ...list, ['', '推算指标', '2018内容', '2019内容'], ...list1]
+          const tHData = [tHeader, ...list, ['推算指标', '', '2018内容', '2019内容'], ...list1]
           const ws = XLSX.utils.aoa_to_sheet(tHData)
           const wb = XLSX.utils.book_new()
           ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 60 }]
           ws['!merges'] = merges
           XLSX.utils.book_append_sheet(wb, ws, '问卷')
-          XLSX.writeFile(wb, 'k.xlsx')
+          XLSX.writeFile(wb, `${row.username}调查问卷.xlsx`)
         }).catch(err => {
           console.log(err)
         })
