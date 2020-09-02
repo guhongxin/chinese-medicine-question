@@ -204,7 +204,7 @@ export default {
       // 利用URL的createObjectURL方法为元素a生成blobURL
       a.href = URL.createObjectURL(blob)
       // 设置文件名
-      a.download = this.username + '调查问卷'
+      a.download = this.username + '调查问卷.xlsx'
       a.click()
     }
   }
