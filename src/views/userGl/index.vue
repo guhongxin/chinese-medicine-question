@@ -127,8 +127,7 @@
 import userDailog from './popup/userDailog'
 import questionnairedetails from './popup/questionnairedetails'
 
-// scoreContent
-import { questionnaireContent } from '@/utils/questionnaireData.js'
+import { questionnaireContent, scoreContent } from '@/utils/questionnaireData.js'
 import { questionnaireGetList, questionnairegetQn } from '@/api/usergl'
 import XLSX from 'xlsx'
 export default {
@@ -210,7 +209,6 @@ export default {
         }).then(res => {
           const data = res.data
           const content = data.questionnaire.content
-          console.log('content', content)
           const list = []
           const merges = []
           let itemIndex = 0
@@ -228,15 +226,54 @@ export default {
                 _list[0] = ''
               }
               _list[1] = questionnaireContent[i].child.mm[j]
-              _list[2] = content['2018']['field' + itemIndex]
-              _list[3] = content['2019']['field' + itemIndex]
+              _list[2] = content ? content['2018']['field' + itemIndex] : ''
+              _list[3] = content ? content['2019']['field' + itemIndex] : ''
               itemIndex++
               list.push(_list)
             }
           }
-          const tHData = [tHeader, ...list]
-          console.log('--kk---', tHData)
-          console.log('--kk---', merges)
+
+          const list1 = []
+          const perMerges1 = merges[merges.length - 1]
+
+          const _merges1 = {
+            s: {
+              r: perMerges1.e.r + 1,
+              c: 0
+            },
+            e: {
+              r: perMerges1.e.r + 1,
+              c: 1
+            }
+          }
+          merges.push(_merges1)
+
+          for (let i = 0; i < scoreContent.length; i++) {
+            const perMerges = merges[merges.length - 1]
+            const _merges = {
+              s: {
+                r: perMerges.e.r + 1,
+                c: 0
+              },
+              e: {
+                r: perMerges.e.r + 1,
+                c: 1
+              }
+            }
+            merges.push(_merges)
+            console.log('merges', merges)
+            list1[i] = []
+            list1[i][0] = scoreContent[i]['name']
+            list1[i][1] = ''
+            if (content) {
+              list1[i][2] = content['2018']['field' + scoreContent[i]['method'][1]] ? ((content['2018']['field' + scoreContent[i]['method'][0]] * 100 / content['2018']['field' + scoreContent[i]['method'][1]]).toFixed(2) + '%') : '0%'
+              list1[i][3] = content['2019']['field' + scoreContent[i]['method'][1]] ? ((content['2019']['field' + scoreContent[i]['method'][0]] * 100 / content['2019']['field' + scoreContent[i]['method'][1]]).toFixed(2) + '%') : '0%'
+            } else {
+              list1[i][2] = ''
+              list1[i][3] = ''
+            }
+          }
+          const tHData = [tHeader, ...list, ['', '推算指标', '2018内容', '2019内容'], ...list1]
           const ws = XLSX.utils.aoa_to_sheet(tHData)
           const wb = XLSX.utils.book_new()
           ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 60 }]
