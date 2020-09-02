@@ -102,7 +102,7 @@
           <template slot-scope="scope">
             <span class="span-btn" @click="userDetails(scope.row)">详情</span>
             <span class="span-btn" @click="viewquestionnaire(scope.row)">查看问卷</span>
-            <!-- <span class="span-btn">导出问卷</span> -->
+            <span class="span-btn" @click="doExport(scope.row)">导出问卷</span>
           </template>
         </el-table-column>
       </el-table>
@@ -126,7 +126,11 @@
 <script>
 import userDailog from './popup/userDailog'
 import questionnairedetails from './popup/questionnairedetails'
-import { questionnaireGetList } from '@/api/usergl'
+
+// scoreContent
+import { questionnaireContent } from '@/utils/questionnaireData.js'
+import { questionnaireGetList, questionnairegetQn } from '@/api/usergl'
+import XLSX from 'xlsx'
 export default {
   components: {
     userDailog,
@@ -197,6 +201,52 @@ export default {
     },
     viewquestionnaire(row) {
       this.$refs.questionnairedetailsDoc.showModule(row)
+    },
+    doExport(row) {
+      require.ensure([], () => { // 用 webpack Code Splitting xlsl还是很大的
+        const tHeader = ['', '指标名称', '2018年内容', '2019年内容'] // excel 表格头
+        questionnairegetQn({
+          userId: row.id
+        }).then(res => {
+          const data = res.data
+          const content = data.questionnaire.content
+          console.log('content', content)
+          const list = []
+          const merges = []
+          let itemIndex = 0
+          for (let i = 0; i < questionnaireContent.length; i++) {
+            if (i === 0) {
+              merges[0] = { s: { r: 1, c: 0 }, e: { r: questionnaireContent[i].child.mm.length, c: 0 }}
+            } else {
+              merges[i] = { s: { r: merges[i - 1]['e']['r'] + 1, c: 0 }, e: { r: merges[i - 1]['e']['r'] + 1 + questionnaireContent[i].child.mm.length - 1, c: 0 }}
+            }
+            for (let j = 0; j < questionnaireContent[i].child.mm.length; j++) {
+              const _list = []
+              if (j === 0) {
+                _list[0] = questionnaireContent[i].name
+              } else {
+                _list[0] = ''
+              }
+              _list[1] = questionnaireContent[i].child.mm[j]
+              _list[2] = content['2018']['field' + itemIndex]
+              _list[3] = content['2019']['field' + itemIndex]
+              itemIndex++
+              list.push(_list)
+            }
+          }
+          const tHData = [tHeader, ...list]
+          console.log('--kk---', tHData)
+          console.log('--kk---', merges)
+          const ws = XLSX.utils.aoa_to_sheet(tHData)
+          const wb = XLSX.utils.book_new()
+          ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 60 }]
+          ws['!merges'] = merges
+          XLSX.utils.book_append_sheet(wb, ws, '问卷')
+          XLSX.writeFile(wb, 'k.xlsx')
+        }).catch(err => {
+          console.log(err)
+        })
+      })
     }
   }
 }
