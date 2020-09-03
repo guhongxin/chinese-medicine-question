@@ -39,14 +39,10 @@ router.beforeEach(async(to, from, next) => {
         }
       } else {
         // 普通用户
-        const stopRoute = ['/userGl', '/accountGl']
-        if (stopRoute.indexOf(to.path) === '/') {
+        const stopRoute = ['/', '/userGl', '/accountGl']
+        if (stopRoute.indexOf(to.path) !== -1) {
           next(`/login`)
           clearCookie()
-        }
-        if (stopRoute.indexOf(to.path) !== -1) {
-          errMsg('该用户暂无权限')
-          next('/404')
         } else {
           next()
         }
