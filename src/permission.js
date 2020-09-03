@@ -41,8 +41,8 @@ router.beforeEach(async(to, from, next) => {
         // 普通用户
         const stopRoute = ['/', '/userGl', '/accountGl']
         if (stopRoute.indexOf(to.path) !== -1) {
-          next(`/login`)
           clearCookie()
+          next(`/login`)
         } else {
           next()
         }
