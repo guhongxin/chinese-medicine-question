@@ -12,7 +12,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="form.password" placeholder="密码">
+          <el-input v-model="form.password" type="password" placeholder="密码">
             <i slot="prefix" class="el-input__icon el-icon-lock" />
           </el-input>
         </el-form-item>
@@ -45,8 +45,8 @@ export default {
   data() {
     return {
       form: {
-        username: 'admin',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],

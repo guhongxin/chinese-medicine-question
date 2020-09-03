@@ -2,7 +2,7 @@ import router from './router'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import { getToken, getCookie } from '@/utils/auth' // get token from cookie
+import { getToken, getCookie, clearCookie } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
@@ -29,6 +29,7 @@ router.beforeEach(async(to, from, next) => {
       const roleName = getCookie('rolename')
       if (roleName === 'admin user') {
         // 管理员
+
         const stopRoute = ['/userBasicInfor', '/answerSheet']
         if (stopRoute.indexOf(to.path) !== -1) {
           errMsg('该用户暂无权限')
@@ -38,7 +39,11 @@ router.beforeEach(async(to, from, next) => {
         }
       } else {
         // 普通用户
-        const stopRoute = ['/', '/userGl', '/accountGl']
+        const stopRoute = ['/userGl', '/accountGl']
+        if (stopRoute.indexOf(to.path) === '/') {
+          next(`/login`)
+          clearCookie()
+        }
         if (stopRoute.indexOf(to.path) !== -1) {
           errMsg('该用户暂无权限')
           next('/404')

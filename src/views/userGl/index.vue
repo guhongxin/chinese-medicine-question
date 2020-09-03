@@ -202,7 +202,6 @@ export default {
       this.$refs.questionnairedetailsDoc.showModule(row)
     },
     doExport(row) {
-      console.log('kkkk', row)
       require.ensure([], () => { // 用 webpack Code Splitting xlsl还是很大的
         const tHeader = ['', '指标名称', '2018年内容', '2019年内容'] // excel 表格头
         questionnairegetQn({

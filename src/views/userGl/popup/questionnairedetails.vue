@@ -47,105 +47,29 @@
   </el-dialog>
 </template>
 <script>
-import { questionnaireContent } from '@/utils/questionnaireData.js'
+import { questionnaireContent, scoreContent } from '@/utils/questionnaireData.js'
 import { questionnairegetQn } from '@/api/usergl'
+import XLSX from 'xlsx'
 export default {
   data() {
     return {
       tabData: questionnaireContent,
       dialogVisible: false,
       username: '',
-      pushIndex: [{
-        name: '按时就诊率',
-        cz1: '',
-        cz2: '',
-        method: [4, 3]
-      }, {
-        name: '预约专家号的患者按时就诊率',
-        cz1: '',
-        cz2: '',
-        method: [5, 6]
-      }, {
-        name: '预约普通号的患者按时就诊率',
-        cz1: '',
-        cz2: '',
-        method: [8, 7]
-      }, {
-        name: '门诊智慧结算率',
-        cz1: '',
-        cz2: '',
-        method: [16, 15]
-      }, {
-        name: '门诊诊间结算率',
-        cz1: '',
-        cz2: '',
-        method: [17, 5]
-      }, {
-        name: '门诊自助结算率',
-        cz1: '',
-        cz2: '',
-        method: [18, 15]
-      }, {
-        name: '门诊移动终端进支付结算率',
-        cz1: '',
-        cz2: '',
-        method: [19, 15]
-      }, {
-        name: '病房智慧结算率',
-        cz1: '',
-        cz2: '',
-        method: [23, 22]
-      }, {
-        name: '病区（床边）结算笔率',
-        cz1: '',
-        cz2: '',
-        method: [24, 22]
-      }, {
-        name: '病房自助结算笔率',
-        cz1: '',
-        cz2: '',
-        method: [25, 22]
-      }, {
-        name: '病房移动终端支付结算率',
-        cz1: '',
-        cz2: '',
-        method: [26, 22]
-      }, {
-        name: '电子发票使用率',
-        cz1: '',
-        cz2: '',
-        method: [29, 28]
-      }, {
-        name: '发票自助打印率',
-        cz1: '',
-        cz2: '',
-        method: [30, 28]
-      }, {
-        name: '检查智慧预约率',
-        cz1: '',
-        cz2: '',
-        method: [37, 36]
-      }, {
-        name: '检查诊间预约率',
-        cz1: '',
-        cz2: '',
-        method: [38, 36]
-      }, {
-        name: '检查集中预约率',
-        cz1: '',
-        cz2: '',
-        method: [39, 36]
-      }]
+      pushIndex: scoreContent
     }
   },
   methods: {
     handleClose() {
+      this.userId = null
+      this.username = null
       this.dialogVisible = false
     },
     showModule(param) {
       // 显示
       this.dialogVisible = true
       this.username = param.username
+      this.userId = param.id
       const obj = {
         userId: param.id
       }
@@ -169,6 +93,93 @@ export default {
         console.log(err)
       })
     },
+    exportExcel() {
+      // 导出excel表格
+      this.doExport()
+    },
+    doExport(row) {
+      require.ensure([], () => { // 用 webpack Code Splitting xlsl还是很大的
+        const tHeader = ['', '指标名称', '2018年内容', '2019年内容'] // excel 表格头
+        questionnairegetQn({
+          userId: this.id
+        }).then(res => {
+          const data = res.data
+          const content = data.questionnaire.content
+          const list = []
+          const merges = []
+          let itemIndex = 0
+          for (let i = 0; i < questionnaireContent.length; i++) {
+            if (i === 0) {
+              merges[0] = { s: { r: 1, c: 0 }, e: { r: questionnaireContent[i].child.mm.length, c: 0 }}
+            } else {
+              merges[i] = { s: { r: merges[i - 1]['e']['r'] + 1, c: 0 }, e: { r: merges[i - 1]['e']['r'] + 1 + questionnaireContent[i].child.mm.length - 1, c: 0 }}
+            }
+            for (let j = 0; j < questionnaireContent[i].child.mm.length; j++) {
+              const _list = []
+              if (j === 0) {
+                _list[0] = questionnaireContent[i].name
+              } else {
+                _list[0] = ''
+              }
+              _list[1] = questionnaireContent[i].child.mm[j]
+              _list[2] = content ? content['2018']['field' + itemIndex] : ''
+              _list[3] = content ? content['2019']['field' + itemIndex] : ''
+              itemIndex++
+              list.push(_list)
+            }
+          }
+
+          const list1 = []
+          const perMerges1 = merges[merges.length - 1]
+
+          const _merges1 = {
+            s: {
+              r: perMerges1.e.r + 1,
+              c: 0
+            },
+            e: {
+              r: perMerges1.e.r + 1,
+              c: 1
+            }
+          }
+          merges.push(_merges1)
+
+          for (let i = 0; i < scoreContent.length; i++) {
+            const perMerges = merges[merges.length - 1]
+            const _merges = {
+              s: {
+                r: perMerges.e.r + 1,
+                c: 0
+              },
+              e: {
+                r: perMerges.e.r + 1,
+                c: 1
+              }
+            }
+            merges.push(_merges)
+            list1[i] = []
+            list1[i][0] = scoreContent[i]['name']
+            list1[i][1] = ''
+            if (content) {
+              list1[i][2] = content['2018']['field' + scoreContent[i]['method'][1]] ? ((content['2018']['field' + scoreContent[i]['method'][0]] * 100 / content['2018']['field' + scoreContent[i]['method'][1]]).toFixed(2) + '%') : '0%'
+              list1[i][3] = content['2019']['field' + scoreContent[i]['method'][1]] ? ((content['2019']['field' + scoreContent[i]['method'][0]] * 100 / content['2019']['field' + scoreContent[i]['method'][1]]).toFixed(2) + '%') : '0%'
+            } else {
+              list1[i][2] = ''
+              list1[i][3] = ''
+            }
+          }
+          const tHData = [tHeader, ...list, ['推算指标', '', '2018内容', '2019内容'], ...list1]
+          const ws = XLSX.utils.aoa_to_sheet(tHData)
+          const wb = XLSX.utils.book_new()
+          ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 60 }]
+          ws['!merges'] = merges
+          XLSX.utils.book_append_sheet(wb, ws, '问卷')
+          XLSX.writeFile(wb, `${this.username}调查问卷.xlsx`)
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    },
     echoData(targetData, sourceData, disabled) {
       let itemIndex = 0
       for (let i = 0; i < targetData.length; i++) {
@@ -182,31 +193,31 @@ export default {
         this.pushIndex[k]['cz1'] = sourceData['2018']['field' + this.pushIndex[k]['method'][1]] ? ((sourceData['2018']['field' + this.pushIndex[k]['method'][0]] * 100 / sourceData['2018']['field' + this.pushIndex[k]['method'][1]]).toFixed(2) + '%') : '0%'
         this.pushIndex[k]['cz2'] = sourceData['2019']['field' + this.pushIndex[k]['method'][1]] ? ((sourceData['2019']['field' + this.pushIndex[k]['method'][0]] * 100 / sourceData['2019']['field' + this.pushIndex[k]['method'][1]]).toFixed(2) + '%') : '0%'
       }
-    },
-    exportExcel() {
-      // 导出excel表格
-      this.tableToExcel()
-    },
-    tableToExcel() {
-      const worksheet = this.username
-      const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset='UTF-8'><!--[if gte mso 9]><xml>
-        <x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
-        <x:Name>${worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
-        <style type="text/css">
-            table {border: 1px solid #000000;}
-            table tr td b {background:#FFFFFF;color:#3D3D3D;font-size:24px;border: 1px solid #000000;}
-            table th {background:#AEE1FE;color:#3D3D3D;font-size:20px;border: 1px solid #000000;}
-            table td {background:#FFFFFF;color:#3D3D3D;font-size:20px;border: 1px solid #000000;}</style>
-        </head><body><table>${document.getElementById('wtable').outerHTML}</table></body></html>`
-      // 创建一个Blob对象，第一个参数是文件的数据，第二个参数是文件类型属性对象
-      const blob = new Blob([template], { type: 'application/vnd.ms-excel' })
-      const a = document.createElement('a')
-      // 利用URL的createObjectURL方法为元素a生成blobURL
-      a.href = URL.createObjectURL(blob)
-      // 设置文件名
-      a.download = this.username + '调查问卷.xlsx'
-      a.click()
     }
+    // exportExcel() {
+    //   // 导出excel表格
+    //   this.tableToExcel()
+    // },
+    // tableToExcel() {
+    //   const worksheet = this.username
+    //   const template = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset='UTF-8'><!--[if gte mso 9]><xml>
+    //     <x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>
+    //     <x:Name>${worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->
+    //     <style type="text/css">
+    //         table {border: 1px solid #000000;}
+    //         table tr td b {background:#FFFFFF;color:#3D3D3D;font-size:24px;border: 1px solid #000000;}
+    //         table th {background:#AEE1FE;color:#3D3D3D;font-size:20px;border: 1px solid #000000;}
+    //         table td {background:#FFFFFF;color:#3D3D3D;font-size:20px;border: 1px solid #000000;}</style>
+    //     </head><body><table>${document.getElementById('wtable').outerHTML}</table></body></html>`
+    //   // 创建一个Blob对象，第一个参数是文件的数据，第二个参数是文件类型属性对象
+    //   const blob = new Blob([template], { type: 'application/vnd.ms-excel' })
+    //   const a = document.createElement('a')
+    //   // 利用URL的createObjectURL方法为元素a生成blobURL
+    //   a.href = URL.createObjectURL(blob)
+    //   // 设置文件名
+    //   a.download = this.username + '调查问卷.xlsx'
+    //   a.click()
+    // }
   }
 }
 </script>
