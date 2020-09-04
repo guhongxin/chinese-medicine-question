@@ -367,7 +367,7 @@ export const scoreContent = [{
   name: '预约普通号的患者按时就诊率',
   cz1: '',
   cz2: '',
-  method: [8, 9]
+  method: [8, 7]
 }, {
   name: '门诊智慧结算率',
   cz1: '',
