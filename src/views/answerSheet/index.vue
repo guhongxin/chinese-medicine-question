@@ -29,8 +29,8 @@
               />
             </el-checkbox-group>
             <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
-              <el-radio label="是" @change="(value) => radioChange(value, item.child.cz1[index].value)" />
-              <el-radio label="否" />
+              <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz1[index], 'value')" />
+              <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz1[index], 'value')" />
             </el-radio-group>
           </td>
           <td>
@@ -43,8 +43,8 @@
               />
             </el-checkbox-group>
             <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
-              <el-radio label="是" />
-              <el-radio label="否" />
+              <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz2[index], 'value')" />
+              <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz2[index], 'value')" />
             </el-radio-group>
           </td>
         </tr>
@@ -182,7 +182,13 @@ export default {
         }
       }
     },
-    radioChange() {},
+    radioChange(val, obj, val2) {
+      if (val === obj[val2]) {
+        this.$set(obj, val2, '')
+        return
+      }
+      this.$set(obj, val2, val)
+    },
     async loginOut() {
       // 退出
       await this.$store.dispatch('user/logout')
