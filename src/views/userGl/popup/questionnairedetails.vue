@@ -68,7 +68,7 @@ export default {
     showModule(param) {
       // 显示
       this.dialogVisible = true
-      this.username = param.username
+      this.username = param.organization_name
       this.userId = param.id
       const obj = {
         userId: param.id
@@ -97,11 +97,11 @@ export default {
       // 导出excel表格
       this.doExport()
     },
-    doExport(row) {
+    doExport() {
       require.ensure([], () => { // 用 webpack Code Splitting xlsl还是很大的
         const tHeader = ['', '指标名称', '2018年内容', '2019年内容'] // excel 表格头
         questionnairegetQn({
-          userId: this.id
+          userId: this.userId
         }).then(res => {
           const data = res.data
           const content = data.questionnaire.content

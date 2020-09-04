@@ -26,7 +26,7 @@
               />
             </el-checkbox-group>
             <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
-              <el-radio label="是" />
+              <el-radio label="是" @change="(value) => radio(value, item.child.cz1[index].value)" />
               <el-radio label="否" />
             </el-radio-group>
           </td>
@@ -178,7 +178,8 @@ export default {
           itemIndex++
         }
       }
-    }
+    },
+    radio() {}
   }
 }
 </script>

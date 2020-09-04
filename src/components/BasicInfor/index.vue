@@ -20,20 +20,34 @@
         />
       </el-form-item>
       <el-form-item>
-        3、医院类别：<el-checkbox-group v-model="form.organizationCategory" class="w-checkbox-group">
+        3、医院类别：
+        <!-- <el-checkbox-group v-model="form.organizationCategory" class="w-checkbox-group">
           <el-checkbox label="中医医院" />
           <el-checkbox label="中西医结合医院" />
-        </el-checkbox-group>
+        </el-checkbox-group> -->
+        <el-radio-group v-model="form.organizationCategory" class="w-checkbox-group">
+          <el-radio label="中医医院">中医医院</el-radio>
+          <el-radio label="中西医结合医院">中西医结合医院</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item>
-        4、医院等级：<el-checkbox-group v-model="form.organizationLevel" class="w-checkbox-group">
+        4、医院等级：
+        <!-- <el-checkbox-group v-model="form.organizationLevel" class="w-checkbox-group">
           <el-checkbox label="三甲" />
           <el-checkbox label="三乙" />
           <el-checkbox label="二甲" />
           <el-checkbox label="二乙" />
           <el-checkbox label="一级" />
           <el-checkbox label="未定级" />
-        </el-checkbox-group>
+        </el-checkbox-group> -->
+        <el-radio-group v-model="form.organizationLevel" class="w-checkbox-group">
+          <el-radio label="三甲">三甲</el-radio>
+          <el-radio label="三乙">三乙</el-radio>
+          <el-radio label="二甲">二甲</el-radio>
+          <el-radio label="二乙">二乙</el-radio>
+          <el-radio label="一级">一级</el-radio>
+          <el-radio label="未定级">未定级</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item>
         5、年门急诊量<el-input
@@ -117,8 +131,8 @@ export default {
         organizationName: '',
         organizationCategoryCode: '',
         organizationLicenseNum: '',
-        organizationCategory: [],
-        organizationLevel: [],
+        organizationCategory: '',
+        organizationLevel: '',
         annualOutpatientEmergencyNum: '',
         annualOutpatientNum: '',
         annualEmergencyNum: '',
@@ -145,8 +159,8 @@ export default {
           organizationName: val.organization_name,
           organizationCategoryCode: val.organization_category_code,
           organizationLicenseNum: val.organization_license_num,
-          organizationCategory: val.organization_category ? val.organization_category.split(',') : [],
-          organizationLevel: val.organization_level ? val.organization_level.split(',') : [],
+          organizationCategory: val.organization_category,
+          organizationLevel: val.organization_level,
           annualOutpatientEmergencyNum: val.annual_outpatient_emergency_num,
           annualOutpatientNum: val.annual_outpatient_num,
           annualEmergencyNum: val.annual_emergency_num,

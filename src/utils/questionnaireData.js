@@ -328,11 +328,11 @@ export const questionnaireContent = [{
     mm: ['是否开展中医药线上科普宣教？', '开展中医药线上科普宣教频次数？'],
     cz1: [
       { type: 2, value: '', options: ['是', '否'] },
-      { type: 1, value: [], options: ['挂号', '付费□诊间□检查检验'] }
+      { type: 0, value: '' }
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
-      { type: 1, value: [], options: ['挂号', '付费□诊间□检查检验'] }
+      { type: 0, value: '' }
     ]
   }
 }, {
@@ -362,12 +362,12 @@ export const scoreContent = [{
   name: '预约专家号的患者按时就诊率',
   cz1: '',
   cz2: '',
-  method: [5, 6]
+  method: [6, 5]
 }, {
   name: '预约普通号的患者按时就诊率',
   cz1: '',
   cz2: '',
-  method: [8, 7]
+  method: [8, 9]
 }, {
   name: '门诊智慧结算率',
   cz1: '',

@@ -12,7 +12,7 @@
             <el-form-item label="医院类别：" prop="organizationCategory">
               <el-select
                 v-model="form.organizationCategory"
-                placeholder="请选择活动区域"
+                placeholder="请选择医院类别"
                 clearable
                 style="width:100%"
               >
@@ -29,7 +29,7 @@
             <el-form-item label="医院等级：" prop="organizationLevel">
               <el-select
                 v-model="form.organizationLevel"
-                placeholder="请选择活动区域"
+                placeholder="请选择医院等级"
                 clearable
               >
                 <el-option
@@ -66,8 +66,8 @@
                 <el-option
                   v-for="(item, key) in stateOptions"
                   :key="key"
-                  :label="item"
-                  :value="item"
+                  :label="item.text"
+                  :value="item.value"
                 />
               </el-select>
             </el-form-item>
@@ -148,7 +148,13 @@ export default {
       },
       hospitalTypeOptions: ['中医医院', '中西医结合医院'],
       hospitalGradeOptions: ['三甲', '三乙', '二甲', '二乙', '一级', '未定级'],
-      stateOptions: ['已提交', '未提交'],
+      stateOptions: [{
+        value: '1',
+        text: '已提交'
+      }, {
+        value: '0',
+        text: '未提交'
+      }],
       listQuery: {
         page: 1,
         size: 10
@@ -278,7 +284,7 @@ export default {
           ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 60 }]
           ws['!merges'] = merges
           XLSX.utils.book_append_sheet(wb, ws, '问卷')
-          XLSX.writeFile(wb, `${row.username}调查问卷.xlsx`)
+          XLSX.writeFile(wb, `${row.organization_name}调查问卷.xlsx`)
         }).catch(err => {
           console.log(err)
         })
