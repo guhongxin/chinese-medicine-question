@@ -1,6 +1,9 @@
 <template>
   <div class="answerSheet">
-    <p class="basicinfor" @click="seeBasicInfor">基本信息</p>
+    <div class="basicinfor">
+      <div @click="seeBasicInfor">基本信息</div>
+      <div class="login-out" @click="loginOut">[退出]</div>
+    </div>
     <div class="title">问卷</div>
     <baseInforDailog ref="baseInforDoc" />
     <table class="w-table" cellspacing="0" style="width:100%;">
@@ -26,7 +29,7 @@
               />
             </el-checkbox-group>
             <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
-              <el-radio label="是" @change="(value) => radio(value, item.child.cz1[index].value)" />
+              <el-radio label="是" @change="(value) => radioChange(value, item.child.cz1[index].value)" />
               <el-radio label="否" />
             </el-radio-group>
           </td>
@@ -179,7 +182,12 @@ export default {
         }
       }
     },
-    radio() {}
+    radioChange() {},
+    async loginOut() {
+      // 退出
+      await this.$store.dispatch('user/logout')
+      this.$router.push(`/login`)
+    }
   }
 }
 </script>
@@ -202,7 +210,12 @@ export default {
     top: 30px;
     font-size: 12px;
     cursor: pointer;
+    display: flex;
+    .login-out {
+      margin-left: 10px;
+    }
   }
+
 }
 .w-table {
   border-bottom: 1px solid #ebeef5;
