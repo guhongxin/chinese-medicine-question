@@ -28,6 +28,17 @@
                 :label="option"
               />
             </el-checkbox-group>
+            <template v-else-if="item.child.cz1[index].type === 3">
+              <el-select v-model="item.child.cz1[index].value" placeholder="请选择" size="small" :disabled="item.child.cz1[index].disabled">
+                <el-option
+                  v-for="(option, key1) in item.child.cz1[index].options"
+                  :key="key1"
+                  :label="option"
+                  :value="option"
+                />
+              </el-select>
+              <el-input v-if="item.child.cz1[index].value === '其它'" v-model="item.child.cz1[index].valueInput" :disabled="item.child.cz1[index].disabled" size="small" style="margin-top: 5px;" />
+            </template>
             <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
               <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz1[index], 'value')" />
               <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz1[index], 'value')" />
@@ -42,6 +53,17 @@
                 :label="option"
               />
             </el-checkbox-group>
+            <template v-else-if="item.child.cz2[index].type === 3">
+              <el-select v-model="item.child.cz2[index].value" placeholder="请选择" size="small" :disabled="item.child.cz2[index].disabled">
+                <el-option
+                  v-for="(option, key1) in item.child.cz2[index].options"
+                  :key="key1"
+                  :label="option"
+                  :value="option"
+                />
+              </el-select>
+              <el-input v-if="item.child.cz2[index].value === '其它'" v-model="item.child.cz2[index].valueInput" :disabled="item.child.cz2[index].disabled" size="small" style="margin-top: 5px;" />
+            </template>
             <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
               <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz2[index], 'value')" />
               <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz2[index], 'value')" />
@@ -116,10 +138,38 @@ export default {
       }
       for (let i = 0; i < param.length; i++) {
         for (let j = 0; j < param[i]['child']['mm'].length; j++) {
-          const isStrcz1 = param[i]['child']['cz1'][j].type === 1
-          result['2018']['field' + itemIndex] = isStrcz1 ? param[i]['child']['cz1'][j].value.join(',') : param[i]['child']['cz1'][j].value
-          const isStrcz2 = param[i]['child']['cz2'][j].type === 1
-          result['2019']['field' + itemIndex] = isStrcz2 ? param[i]['child']['cz2'][j].value.join(',') : param[i]['child']['cz2'][j].value
+          // 2018
+          if (param[i]['child']['cz1'][j].type === 1) {
+            // 类型为1，多选
+            result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].value.join(',')
+          } else if (param[i]['child']['cz1'][j].type === 3) {
+            // 下拉 选择不为其它，为下拉选项， 如果是其它 就取输入值
+            if (param[i]['child']['cz1'][j].value !== '其它') {
+              result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].value
+            } else {
+              result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].valueInput
+            }
+          } else {
+            result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].value
+          }
+          // 2019
+          if (param[i]['child']['cz2'][j].type === 1) {
+            // 类型为1，多选
+            result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].value.join(',')
+          } else if (param[i]['child']['cz2'][j].type === 3) {
+            // 下拉 选择不为其它，为下拉选项， 如果是其它 就取输入值
+            if (param[i]['child']['cz2'][j].value !== '其它') {
+              result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].value
+            } else {
+              result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].valueInput
+            }
+          } else {
+            result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].value
+          }
+          // const isStrcz1 = param[i]['child']['cz1'][j].type === 1
+          // result['2018']['field' + itemIndex] = isStrcz1 ? param[i]['child']['cz1'][j].value.join(',') : param[i]['child']['cz1'][j].value
+          // const isStrcz2 = param[i]['child']['cz2'][j].type === 1
+          // result['2019']['field' + itemIndex] = isStrcz2 ? param[i]['child']['cz2'][j].value.join(',') : param[i]['child']['cz2'][j].value
           itemIndex++
         }
       }
@@ -172,12 +222,56 @@ export default {
       let itemIndex = 0
       for (let i = 0; i < targetData.length; i++) {
         for (let j = 0; j < targetData[i]['child']['mm'].length; j++) {
-          const toArr1 = targetData[i]['child']['cz1'][j].type === 1
-          targetData[i]['child']['cz1'][j].value = toArr1 ? sourceData['2018']['field' + itemIndex].split(',') : sourceData['2018']['field' + itemIndex]
+          // 2018
+          if (targetData[i]['child']['cz1'][j].type === 1) {
+            // 多选， 将字符串变成数组
+            targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex].split(',')
+          } else if (targetData[i]['child']['cz1'][j].type === 3) {
+            // 下拉 判断值是否是其它
+            const _options = JSON.parse(JSON.stringify(targetData[i]['child']['cz1'][j].options))
+            const otherIndex = _options.findIndex(item => item === '其它')
+            _options.splice(otherIndex, 1)
+            if (_options.indexOf(sourceData['2018']['field' + itemIndex]) !== -1) {
+              // 不是其它
+              targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex]
+            } else {
+              // 是其它
+              targetData[i]['child']['cz1'][j].value = '其它'
+              targetData[i]['child']['cz1'][j].valueInput = sourceData['2018']['field' + itemIndex]
+            }
+          } else {
+            // 输入 或者单选直接等于
+            targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex]
+          }
           targetData[i]['child']['cz1'][j].disabled = disabled
-          const toArr2 = targetData[i]['child']['cz2'][j].type === 1
-          targetData[i]['child']['cz2'][j].value = toArr2 ? sourceData['2019']['field' + itemIndex].split(',') : sourceData['2019']['field' + itemIndex]
+
+          if (targetData[i]['child']['cz2'][j].type === 1) {
+            // 多选， 将字符串变成数组
+            targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex].split(',')
+          } else if (targetData[i]['child']['cz2'][j].type === 3) {
+            // 下拉 判断值是否是其它
+            const _options = JSON.parse(JSON.stringify(targetData[i]['child']['cz2'][j].options))
+            const otherIndex = _options.findIndex(item => item === '其它')
+            _options.splice(otherIndex, 1)
+            if (_options.indexOf(sourceData['2019']['field' + itemIndex]) !== -1) {
+              // 不是其它
+              targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex]
+            } else {
+              // 是其它
+              targetData[i]['child']['cz2'][j].value = '其它'
+              targetData[i]['child']['cz2'][j].valueInput = sourceData['2019']['field' + itemIndex]
+            }
+          } else {
+            // 输入 或者单选直接等于
+            targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex]
+          }
           targetData[i]['child']['cz2'][j].disabled = disabled
+          // const toArr1 = targetData[i]['child']['cz1'][j].type === 1
+          // targetData[i]['child']['cz1'][j].value = toArr1 ? sourceData['2018']['field' + itemIndex].split(',') : sourceData['2018']['field' + itemIndex]
+          // targetData[i]['child']['cz1'][j].disabled = disabled
+          // const toArr2 = targetData[i]['child']['cz2'][j].type === 1
+          // targetData[i]['child']['cz2'][j].value = toArr2 ? sourceData['2019']['field' + itemIndex].split(',') : sourceData['2019']['field' + itemIndex]
+          // targetData[i]['child']['cz2'][j].disabled = disabled
           itemIndex++
         }
       }
