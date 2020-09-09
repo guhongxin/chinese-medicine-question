@@ -377,7 +377,7 @@ export const scoreContent = [{
   name: '门诊诊间结算率',
   cz1: '',
   cz2: '',
-  method: [17, 5]
+  method: [17, 15]
 }, {
   name: '门诊自助结算率',
   cz1: '',
