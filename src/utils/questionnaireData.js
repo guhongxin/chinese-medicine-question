@@ -7,7 +7,7 @@ export const questionnaireContent = [{
     ],
     cz1: [
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约'] },
+      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
       { type: 2, value: '', options: ['是', '否'] },
       { type: 0, value: '' },
       { type: 0, value: '' },
@@ -18,7 +18,7 @@ export const questionnaireContent = [{
     ],
     cz2: [
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约'] },
+      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
       { type: 2, value: '', options: ['是', '否'] },
       { type: 0, value: '' },
       { type: 0, value: '' },
@@ -150,7 +150,7 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询'] }
+      { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询', '其它'] }
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
@@ -161,19 +161,18 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询'] }
+      { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询', '其它'] }
     ]
   }
 }, {
   name: '互联网+',
   child: {
-    mm: ['是否开展互联网医疗', '中医医疗例数', '互联网医院是否接入省互联网监管平台', '互联网医院建设方式', '互联网诊疗总例数（机构对个人）',
+    mm: ['是否开展互联网医疗', '互联网医院是否接入省互联网监管平台', '互联网医院建设方式', '互联网诊疗总例数（机构对个人）',
       '远程诊疗总例数（机构对机构）', '互联网电子处方张数', '是否开展互联网+护理', '服务模式', '网上门诊服务例数', '其中中医护理例数', '中医护理服务项目有哪些？',
       '中医护理服务模式有哪些？', '中医护理回访人次数'
     ],
     cz1: [
       { type: 2, value: '', options: ['是', '否'] },
-      { type: 0, value: '' },
       { type: 2, value: '', options: ['是', '否'] },
       { type: 3, value: '', valueInput: '', options: ['入驻', '单独建设', '合作共建', '其它'] },
       { type: 0, value: '' },
@@ -189,7 +188,6 @@ export const questionnaireContent = [{
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
-      { type: 0, value: '' },
       { type: 2, value: '', options: ['是', '否'] },
       { type: 3, value: '', valueInput: '', options: ['入驻', '单独建设', '合作共建', '其它'] },
       { type: 0, value: '' },
