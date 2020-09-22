@@ -100,8 +100,8 @@ export default {
           }
         }
       }
-      _form.organizationCategory = _form.organizationCategory.join(',')
-      _form.organizationLevel = _form.organizationLevel.join(',')
+      // _form.organizationCategory = _form.organizationCategory.join(',')
+      // _form.organizationLevel = _form.organizationLevel.join(',')
       if (!this.errMsg) {
         // 没有错误填写机构信息
         const obj = Object.assign({}, _form, {
