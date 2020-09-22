@@ -168,7 +168,7 @@ export const questionnaireContent = [{
   name: '互联网+',
   child: {
     mm: ['是否开展互联网医疗', '互联网医院是否接入省互联网监管平台', '互联网医院建设方式', '互联网诊疗总例数（机构对个人）',
-      '远程诊疗总例数（机构对机构）', '互联网电子处方张数', '是否开展互联网+护理', '服务模式', '网上门诊服务例数', '其中中医护理例数', '中医护理服务项目有哪些？',
+      '远程会诊总例数', '互联网电子处方张数', '是否开展互联网+护理', '服务模式', '网上门诊服务例数', '其中中医护理例数', '中医护理技术开展项目数',
       '中医护理服务模式有哪些？', '中医护理回访人次数'
     ],
     cz1: [
@@ -183,7 +183,7 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 1, value: [], options: ['门诊护理', '住院护理', '网上诊疗', '居家护理'] },
       { type: 0, value: '' }
     ],
     cz2: [
@@ -198,7 +198,7 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 1, value: [], options: ['门诊护理', '住院护理', '网上诊疗', '居家护理'] },
       { type: 0, value: '' }
     ]
   }
