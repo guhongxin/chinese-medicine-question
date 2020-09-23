@@ -287,6 +287,32 @@ export default {
       // 退出
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login`)
+    },
+    verifyData(param) {
+      const verify = ['2018', '2019']
+      for (const key of verify) {
+        const _data = param[key]
+        if (Number(_data.field4) > Number(_data.field3)) {
+          this.warnts('预约患者按时就诊人次数<=网上预约人次数')
+        }
+        if (Number(_data.field3) !== Number(_data.field5) + Number(_data.field7)) {
+          this.warnts('网上预约人次数=网上预约专家号人次数+网上预约普通号人次数')
+        }
+        if (Number(_data.field6) > Number(_data.field5)) {
+          this.warnts('预约专家号的患者按时就诊人次数<=网上预约专家号人次数')
+        }
+        if (Number(_data.field6) > Number(_data.field7)) {
+          this.warnts('预约普通号的患者按时就诊人次数<=网上预约普通号人次数')
+        }
+      }
+    },
+    warnts(msg) {
+      // 警告提示
+      this.$message({
+        type: 'warning',
+        message: `${msg},请重新填写问卷！`
+      })
+      return false
     }
   }
 }
