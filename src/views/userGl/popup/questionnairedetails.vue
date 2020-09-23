@@ -108,6 +108,7 @@ export default {
           const list = []
           const merges = []
           let itemIndex = 0
+          console.log('questionnaireContent', questionnaireContent)
           for (let i = 0; i < questionnaireContent.length; i++) {
             if (i === 0) {
               merges[0] = { s: { r: 1, c: 0 }, e: { r: questionnaireContent[i].child.mm.length, c: 0 }}
@@ -184,8 +185,34 @@ export default {
       let itemIndex = 0
       for (let i = 0; i < targetData.length; i++) {
         for (let j = 0; j < targetData[i]['child']['mm'].length; j++) {
-          targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex]
-          targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex]
+          if (targetData[i]['child']['cz1'][j]['type'] === 5) {
+            const _value = sourceData['2018']['field' + itemIndex]
+            const _child = targetData[i]['child']['cz1'][j]['child']
+            const childValue = _value.split(',')
+            let result = ''
+            for (let kkmm = 0; kkmm < childValue.length; kkmm++) {
+              if (childValue[kkmm]) {
+                result += `${_child[kkmm].qzLable}${childValue[kkmm]}${_child[kkmm].unit},`
+              }
+            }
+            targetData[i]['child']['cz1'][j].value = result.replace(/,$/g, '')
+          } else {
+            targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex].replace(/,$/g, '')
+          }
+          if (targetData[i]['child']['cz2'][j]['type'] === 5) {
+            const _value = sourceData['2019']['field' + itemIndex]
+            const _child = targetData[i]['child']['cz2'][j]['child']
+            const childValue = _value.split(',')
+            let result = ''
+            for (let kkmm = 0; kkmm < childValue.length; kkmm++) {
+              if (childValue[kkmm]) {
+                result += `${_child[kkmm].qzLable}${childValue[kkmm]}${_child[kkmm].unit},`
+              }
+            }
+            targetData[i]['child']['cz2'][j].value = result.replace(/,$/g, '')
+          } else {
+            targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex].replace(/,$/g, '')
+          }
           itemIndex++
         }
       }
