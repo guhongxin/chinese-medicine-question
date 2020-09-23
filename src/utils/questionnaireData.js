@@ -261,8 +261,24 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 2, value: '', options: ['是', '否'] },
       { type: 1, value: [], options: ['市', '省', '国'] },
-      { type: 0, value: '' }
-
+      { type: 5, value: '', child: [
+        {
+          type: 0,
+          value: '',
+          qzLable: '市内',
+          unit: '天'
+        }, {
+          type: 0,
+          value: '',
+          qzLable: '市外省内',
+          unit: '天'
+        }, {
+          type: 0,
+          value: '',
+          qzLable: '省外',
+          unit: '天'
+        }]
+      }
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
@@ -270,7 +286,24 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 2, value: '', options: ['是', '否'] },
       { type: 1, value: [], options: ['市', '省', '国'] },
-      { type: 0, value: '' }
+      { type: 5, value: '', child: [
+        {
+          type: 0,
+          value: '',
+          qzLable: '市内',
+          unit: '天'
+        }, {
+          type: 0,
+          value: '',
+          qzLable: '市外省内',
+          unit: '天'
+        }, {
+          type: 0,
+          value: '',
+          qzLable: '省外',
+          unit: '天'
+        }]
+      }
     ]
   }
 }, {

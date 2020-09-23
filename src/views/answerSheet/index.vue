@@ -46,6 +46,23 @@
               <el-input v-if="item.child.cz1[index].value === '其它'" v-model="item.child.cz1[index].valueInput" :disabled="item.child.cz1[index].disabled" size="small" style="margin-top: 5px;" />
             </template>
             <div v-else-if="item.child.cz1[index].type === 4">{{ item.child.cz1[index].value }}</div>
+            <div v-else-if="item.child.cz1[index].type === 5" class="colDivRow">
+              <div
+                v-for="(colRow, colRowIndex) in item.child.cz1[index].child"
+                :key="colRowIndex"
+                class="div-row"
+              >
+                {{ colRow.qzLable }}
+                <el-input
+                  v-if="colRow.type === 0"
+                  v-model="colRow.value"
+                  :disabled="colRow.disabled"
+                  size="small"
+                  class="hzInput"
+                  style="width:40%;vertical-align: super;"
+                />{{ colRow.unit }}
+              </div>
+            </div>
             <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
               <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz1[index], 'value', item.child.cz1, [1, 2])" />
               <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz1[index], 'value', item.child.cz1, [1, 2])" />
@@ -78,6 +95,23 @@
               <el-input v-if="item.child.cz2[index].value === '其它'" v-model="item.child.cz2[index].valueInput" :disabled="item.child.cz2[index].disabled" size="small" style="margin-top: 5px;" />
             </template>
             <div v-else-if="item.child.cz2[index].type === 4">{{ item.child.cz2[index].value }}</div>
+            <div v-else-if="item.child.cz2[index].type === 5" class="colDivRow">
+              <div
+                v-for="(colRow, colRowIndex) in item.child.cz2[index].child"
+                :key="colRowIndex"
+                class="div-row"
+              >
+                {{ colRow.qzLable }}
+                <el-input
+                  v-if="colRow.type === 0"
+                  v-model="colRow.value"
+                  :disabled="colRow.disabled"
+                  size="small"
+                  class="hzInput"
+                  style="width:40%;vertical-align: super;"
+                />{{ colRow.unit }}
+              </div>
+            </div>
             <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
               <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz2[index], 'value', item.child.cz2, [1, 2])" />
               <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz2[index], 'value', item.child.cz2, [1, 2])" />
@@ -138,6 +172,7 @@ export default {
         type: 'warning'
       }).then(() => {
         const _result = this.statisticalData(this.tabData)
+        this.verifyData(_result)
         const obj = Object.assign({}, {
           userId: this.userId,
           status: '1'
@@ -167,6 +202,12 @@ export default {
             } else {
               result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].valueInput
             }
+          } else if (param[i]['child']['cz1'][j].type === 5) {
+            const _value = param[i]['child']['cz1'][j].child.reduce((total, item) => {
+              total.push(item.value || '')
+              return total
+            }, [])
+            result['2018']['field' + itemIndex] = _value.join(',')
           } else {
             result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].value
           }
@@ -181,6 +222,12 @@ export default {
             } else {
               result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].valueInput
             }
+          } else if (param[i]['child']['cz2'][j].type === 5) {
+            const _value = param[i]['child']['cz2'][j].child.reduce((total, item) => {
+              total.push(item.value || '')
+              return total
+            }, [])
+            result['2019']['field' + itemIndex] = _value.join(',')
           } else {
             result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].value
           }
@@ -257,6 +304,13 @@ export default {
               targetData[i]['child']['cz1'][j].value = '其它'
               targetData[i]['child']['cz1'][j].valueInput = sourceData['2018']['field' + itemIndex]
             }
+          } else if (targetData[i]['child']['cz1'][j].type === 5) {
+            const _value = sourceData['2018']['field' + itemIndex]
+            const childValue = _value.split(',')
+            for (let kkmm = 0; kkmm < childValue.length; kkmm++) {
+              targetData[i]['child']['cz1'][j]['child'][kkmm]['value'] = childValue[kkmm]
+              targetData[i]['child']['cz1'][j]['child'][kkmm]['disabled'] = disabled
+            }
           } else {
             // 输入 或者单选直接等于
             targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex]
@@ -278,6 +332,13 @@ export default {
               // 是其它
               targetData[i]['child']['cz2'][j].value = '其它'
               targetData[i]['child']['cz2'][j].valueInput = sourceData['2019']['field' + itemIndex]
+            }
+          } else if (targetData[i]['child']['cz2'][j].type === 5) {
+            const _value = sourceData['2019']['field' + itemIndex]
+            const childValue = _value.split(',')
+            for (let kkmm = 0; kkmm < childValue.length; kkmm++) {
+              targetData[i]['child']['cz2'][j]['child'][kkmm]['value'] = childValue[kkmm]
+              targetData[i]['child']['cz2'][j]['child'][kkmm]['disabled'] = disabled
             }
           } else {
             // 输入 或者单选直接等于
@@ -329,93 +390,123 @@ export default {
         const _data = param[key]
         if (Number(_data.field4) > Number(_data.field3)) {
           this.warnts('预约患者按时就诊人次数<=网上预约人次数')
+          return false
         }
         if (Number(_data.field3) !== Number(_data.field5) + Number(_data.field7)) {
           this.warnts('网上预约人次数=网上预约专家号人次数+网上预约普通号人次数')
+          return false
         }
         if (Number(_data.field6) > Number(_data.field5)) {
           this.warnts('预约专家号的患者按时就诊人次数<=网上预约专家号人次数')
+          return false
         }
         if (Number(_data.field6) > Number(_data.field7)) {
           this.warnts('预约普通号的患者按时就诊人次数<=网上预约普通号人次数')
+          return false
         }
         if (Number(_data.field16) > Number(_data.field15)) {
           this.warnts('门诊智慧结算笔数<=门诊总结算笔数')
+          return false
         }
         if (Number(_data.field16) !== Number(_data.field17) + Number(_data.field18)) {
           this.warnts('门诊智慧结算笔数=门诊诊间结算笔数+门诊自助结算笔数')
+          return false
         }
         if (Number(_data.field19) > Number(_data.field15)) {
           this.warnts('门诊通过移动终端进行支付的结算笔数<=门诊总结算笔数')
+          return false
         }
         if (Number(_data.field23) > Number(_data.field22)) {
           this.warnts('病房智慧结算笔数<=病房总结算笔数')
+          return false
         }
         if (Number(_data.field23) !== Number(_data.field24) + Number(_data.field25)) {
           this.warnts('病房智慧结算笔数=病区（床边）结算笔数+病房自助结算笔数')
+          return false
         }
         if (Number(_data.field24) > Number(_data.field23)) {
           this.warnts('病区（床边）结算笔数<=病房智慧结算笔数')
+          return false
         }
         if (Number(_data.field25) > Number(_data.field23)) {
           this.warnts('病房自助结算笔数<=病房智慧结算笔数')
+          return false
         }
         if (Number(_data.field26) > Number(_data.field23)) {
           this.warnts('病房通过移动终端进行支付的结算笔数<=病房智慧结算笔数')
+          return false
         }
         if (Number(_data.field29) > Number(_data.field28)) {
           this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+          return false
         }
         if (Number(_data.field30) > Number(_data.field28)) {
           this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+          return false
         }
         if (Number(_data.field31) > Number(_data.field28)) {
           this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+          return false
         }
         if (Number(_data.field37) > Number(_data.field36)) {
           this.warnts('检查智慧预约人次数<=检查预约人次数')
+          return false
         }
         if (Number(_data.field37) !== Number(_data.field38) + Number(_data.field39) + Number(_data.field40)) {
           this.warnts('检查智慧预约人次数=检查诊间预约人次数+检查集中预约人次数+检查自助预约人次数')
+          return false
         }
         if (Number(_data.field38) > Number(_data.field37)) {
           this.warnts('检查诊间预约人次数<=检查智慧预约人次数')
+          return false
         }
         if (Number(_data.field39) > Number(_data.field37)) {
           this.warnts('检查集中预约人次数<=检查智慧预约人次数')
+          return false
         }
         if (Number(_data.field40) > Number(_data.field37)) {
           this.warnts('检查自助预约人次数<=检查智慧预约人次数')
+          return false
         }
         if (Number(_data.field41) > Number(_data.field37)) {
           this.warnts('预约患者按时检查人次数<=检查智慧预约人次数')
+          return false
         }
         if (Number(_data.field42) > Number(_data.field37)) {
           this.warnts('分时段检查预约人次数<=检查智慧预约人次数')
+          return false
         }
         if (Number(_data.field61) > Number(_data.field5)) {
           this.warnts('名中医就诊人次数<=网上预约专家号人次数')
+          return false
         }
         if (Number(_data.field60) > Number(_data.field61)) {
           this.warnts('网上预约名中医人次数<=名中医就诊人次数')
+          return false
         }
         if (Number(_data.field62) > Number(_data.field60)) {
           this.warnts('预约名中医号的患者按时就诊人次数<=网上预约名中医人次数')
+          return false
         }
         if (Number(_data.field63) > Number(_data.field60)) {
           this.warnts('名中医初诊病人人次数<=网上预约名中医人次数')
+          return false
         }
         if (Number(_data.field74) > Number(_data.field73)) {
           this.warnts('开展中医远程国际会诊人次总数<=开展中医远程会诊人次总数')
+          return false
         }
         if (Number(_data.field77) > Number(_data.field76)) {
           this.warnts('冬病夏治服务回访人次数<=开展冬病夏治服务总人次数')
+          return false
         }
         if (Number(_data.field85) > Number(_data.field84)) {
           this.warnts('开展线上适宜技术推广项目总数<=开展适宜技术推广项目数')
+          return false
         }
         if (Number(_data.field86) > Number(_data.field84)) {
           this.warnts('适宜技术推广回访总数<=开展适宜技术推广项目数')
+          return false
         }
       }
     },
@@ -425,7 +516,6 @@ export default {
         type: 'warning',
         message: `${msg},请重新填写问卷！`
       })
-      return false
     },
     organizationGetOzApi(param) {
       // 获取机构信息
@@ -504,6 +594,21 @@ export default {
   .w-btn {
     width: 120px;
     border-radius: 30px;
+  }
+}
+.hzInput /deep/ input {
+  border-top: transparent;
+  border-left: transparent;
+  border-right: transparent;
+  border-radius: 0px;
+}
+.colDivRow {
+  margin: -10px -5px;
+  .div-row {
+    padding: 5px;
+  }
+  &>.div-row:not(:last-child) {
+    border-bottom: 1px solid  #ebeef5;
   }
 }
 </style>
