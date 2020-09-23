@@ -39,7 +39,7 @@
               </el-select>
               <el-input v-if="item.child.cz1[index].value === '其它'" v-model="item.child.cz1[index].valueInput" :disabled="item.child.cz1[index].disabled" size="small" style="margin-top: 5px;" />
             </template>
-            <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
+            <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled" @change="(val) => radioGroupChange(val, item.child.cz1[index])">
               <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz1[index], 'value')" />
               <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz1[index], 'value')" />
             </el-radio-group>
@@ -64,7 +64,7 @@
               </el-select>
               <el-input v-if="item.child.cz2[index].value === '其它'" v-model="item.child.cz2[index].valueInput" :disabled="item.child.cz2[index].disabled" size="small" style="margin-top: 5px;" />
             </template>
-            <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
+            <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled" @change="(val) => radioGroupChange(val, item.child.cz1[index])">
               <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz2[index], 'value')" />
               <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz2[index], 'value')" />
             </el-radio-group>
@@ -288,6 +288,9 @@ export default {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login`)
     },
+    radioGroupChange(val, obj) {
+      // 如果选择了否，禁用健康医保卡使用人次field10
+    },
     verifyData(param) {
       const verify = ['2018', '2019']
       for (const key of verify) {
@@ -303,6 +306,84 @@ export default {
         }
         if (Number(_data.field6) > Number(_data.field7)) {
           this.warnts('预约普通号的患者按时就诊人次数<=网上预约普通号人次数')
+        }
+        if (Number(_data.field16) > Number(_data.field15)) {
+          this.warnts('门诊智慧结算笔数<=门诊总结算笔数')
+        }
+        if (Number(_data.field16) !== Number(_data.field17) + Number(_data.field18)) {
+          this.warnts('门诊智慧结算笔数=门诊诊间结算笔数+门诊自助结算笔数')
+        }
+        if (Number(_data.field19) > Number(_data.field15)) {
+          this.warnts('门诊通过移动终端进行支付的结算笔数<=门诊总结算笔数')
+        }
+        if (Number(_data.field23) > Number(_data.field22)) {
+          this.warnts('病房智慧结算笔数<=病房总结算笔数')
+        }
+        if (Number(_data.field23) !== Number(_data.field24) + Number(_data.field25)) {
+          this.warnts('病房智慧结算笔数=病区（床边）结算笔数+病房自助结算笔数')
+        }
+        if (Number(_data.field24) > Number(_data.field23)) {
+          this.warnts('病区（床边）结算笔数<=病房智慧结算笔数')
+        }
+        if (Number(_data.field25) > Number(_data.field23)) {
+          this.warnts('病房自助结算笔数<=病房智慧结算笔数')
+        }
+        if (Number(_data.field26) > Number(_data.field23)) {
+          this.warnts('病房通过移动终端进行支付的结算笔数<=病房智慧结算笔数')
+        }
+        if (Number(_data.field29) > Number(_data.field28)) {
+          this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+        }
+        if (Number(_data.field30) > Number(_data.field28)) {
+          this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+        }
+        if (Number(_data.field31) > Number(_data.field28)) {
+          this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+        }
+        if (Number(_data.field37) > Number(_data.field36)) {
+          this.warnts('检查智慧预约人次数<=检查预约人次数')
+        }
+        if (Number(_data.field37) !== Number(_data.field38) + Number(_data.field39) + Number(_data.field40)) {
+          this.warnts('检查智慧预约人次数=检查诊间预约人次数+检查集中预约人次数+检查自助预约人次数')
+        }
+        if (Number(_data.field38) > Number(_data.field37)) {
+          this.warnts('检查诊间预约人次数<=检查智慧预约人次数')
+        }
+        if (Number(_data.field39) > Number(_data.field37)) {
+          this.warnts('检查集中预约人次数<=检查智慧预约人次数')
+        }
+        if (Number(_data.field40) > Number(_data.field37)) {
+          this.warnts('检查自助预约人次数<=检查智慧预约人次数')
+        }
+        if (Number(_data.field41) > Number(_data.field37)) {
+          this.warnts('预约患者按时检查人次数<=检查智慧预约人次数')
+        }
+        if (Number(_data.field42) > Number(_data.field37)) {
+          this.warnts('分时段检查预约人次数<=检查智慧预约人次数')
+        }
+        if (Number(_data.field61) > Number(_data.field5)) {
+          this.warnts('名中医就诊人次数<=网上预约专家号人次数')
+        }
+        if (Number(_data.field60) > Number(_data.field61)) {
+          this.warnts('网上预约名中医人次数<=名中医就诊人次数')
+        }
+        if (Number(_data.field62) > Number(_data.field60)) {
+          this.warnts('预约名中医号的患者按时就诊人次数<=网上预约名中医人次数')
+        }
+        if (Number(_data.field63) > Number(_data.field60)) {
+          this.warnts('名中医初诊病人人次数<=网上预约名中医人次数')
+        }
+        if (Number(_data.field74) > Number(_data.field73)) {
+          this.warnts('开展中医远程国际会诊人次总数<=开展中医远程会诊人次总数')
+        }
+        if (Number(_data.field77) > Number(_data.field76)) {
+          this.warnts('冬病夏治服务回访人次数<=开展冬病夏治服务总人次数')
+        }
+        if (Number(_data.field85) > Number(_data.field84)) {
+          this.warnts('开展线上适宜技术推广项目总数<=开展适宜技术推广项目数')
+        }
+        if (Number(_data.field86) > Number(_data.field84)) {
+          this.warnts('适宜技术推广回访总数<=开展适宜技术推广项目数')
         }
       }
     },
