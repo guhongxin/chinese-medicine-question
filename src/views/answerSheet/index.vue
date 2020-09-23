@@ -314,8 +314,16 @@ export default {
           } else {
             // 输入 或者单选直接等于
             targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex]
+            if (targetData[i]['child']['mm'][j] === '是否实现“两卡融合”') {
+              if (targetData[i]['child']['cz1'][j].value === '否') {
+                // 是否实现“两卡融合” 如果是否 健康医保卡使用人次禁用
+                targetData[i]['child']['cz1'][j + 1].disabled = true
+              }
+            }
           }
-          targetData[i]['child']['cz1'][j].disabled = disabled
+          if (disabled) {
+            targetData[i]['child']['cz1'][j].disabled = disabled
+          }
 
           if (targetData[i]['child']['cz2'][j].type === 1) {
             // 多选， 将字符串变成数组
@@ -343,8 +351,16 @@ export default {
           } else {
             // 输入 或者单选直接等于
             targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex]
+            if (targetData[i]['child']['mm'][j] === '是否实现“两卡融合”') {
+              if (targetData[i]['child']['cz2'][j].value === '否') {
+                // 是否实现“两卡融合” 如果是否 健康医保卡使用人次禁用
+                targetData[i]['child']['cz2'][j + 1].disabled = true
+              }
+            }
           }
-          targetData[i]['child']['cz2'][j].disabled = disabled
+          if (disabled) {
+            targetData[i]['child']['cz2'][j].disabled = disabled
+          }
           // const toArr1 = targetData[i]['child']['cz1'][j].type === 1
           // targetData[i]['child']['cz1'][j].value = toArr1 ? sourceData['2018']['field' + itemIndex].split(',') : sourceData['2018']['field' + itemIndex]
           // targetData[i]['child']['cz1'][j].disabled = disabled

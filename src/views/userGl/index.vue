@@ -239,7 +239,7 @@ export default {
                 let resultcz1 = ''
                 for (let kkmm1 = 0; kkmm1 < _valueArrcz1.length; kkmm1++) {
                   if (_valueArrcz1[kkmm1]) {
-                    resultcz1 = `${_childcz1[kkmm1].qzLable}${_valueArrcz1[kkmm1]}${_childcz1[kkmm1].unit}`
+                    resultcz1 += `${_childcz1[kkmm1].qzLable}${_valueArrcz1[kkmm1]}${_childcz1[kkmm1].unit}`
                   }
                 }
                 _list[2] = resultcz1.replace(/,$/g, '')
@@ -250,7 +250,7 @@ export default {
                 let resultcz2 = ''
                 for (let kkmm2 = 0; kkmm2 < _valueArrcz2.length; kkmm2++) {
                   if (_valueArrcz2[kkmm2]) {
-                    resultcz2 = `${_childcz2[kkmm2].qzLable}${_valueArrcz2[kkmm2]}${_childcz2[kkmm2].unit}`
+                    resultcz2 += `${_childcz2[kkmm2].qzLable}${_valueArrcz2[kkmm2]}${_childcz2[kkmm2].unit}`
                   }
                 }
                 _list[3] = resultcz2.replace(/,$/g, '')
