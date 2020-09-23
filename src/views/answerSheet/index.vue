@@ -20,7 +20,13 @@
           </td>
           <td width="40%">{{ childp }}</td>
           <td>
-            <el-input v-if="item.child.cz1[index].type === 0" v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled" size="small" />
+            <el-input
+              v-if="item.child.cz1[index].type === 0"
+              v-model="item.child.cz1[index].value"
+              :disabled="item.child.cz1[index].disabled"
+              size="small"
+              @change="(val) => inputChange(val, item.child.cz1[index], item.child.cz1, 2)"
+            />
             <el-checkbox-group v-else-if="item.child.cz1[index].type === 1" v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
               <el-checkbox
                 v-for="(option, key1) in item.child.cz1[index].options"
@@ -39,13 +45,20 @@
               </el-select>
               <el-input v-if="item.child.cz1[index].value === '其它'" v-model="item.child.cz1[index].valueInput" :disabled="item.child.cz1[index].disabled" size="small" style="margin-top: 5px;" />
             </template>
-            <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled" @change="(val) => radioGroupChange(val, item.child.cz1[index])">
-              <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz1[index], 'value')" />
-              <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz1[index], 'value')" />
+            <div v-else-if="item.child.cz1[index].type === 4">{{ item.child.cz1[index].value }}</div>
+            <el-radio-group v-else v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
+              <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz1[index], 'value', item.child.cz1, [1, 2])" />
+              <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz1[index], 'value', item.child.cz1, [1, 2])" />
             </el-radio-group>
           </td>
           <td>
-            <el-input v-if="item.child.cz2[index].type === 0" v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled" size="small" />
+            <el-input
+              v-if="item.child.cz2[index].type === 0"
+              v-model="item.child.cz2[index].value"
+              :disabled="item.child.cz2[index].disabled"
+              size="small"
+              @change="(val) => inputChange(val, item.child.cz2[index], item.child.cz2, 2)"
+            />
             <el-checkbox-group v-else-if="item.child.cz2[index].type === 1" v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
               <el-checkbox
                 v-for="(option, key1) in item.child.cz2[index].options"
@@ -64,9 +77,10 @@
               </el-select>
               <el-input v-if="item.child.cz2[index].value === '其它'" v-model="item.child.cz2[index].valueInput" :disabled="item.child.cz2[index].disabled" size="small" style="margin-top: 5px;" />
             </template>
-            <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled" @change="(val) => radioGroupChange(val, item.child.cz1[index])">
-              <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz2[index], 'value')" />
-              <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz2[index], 'value')" />
+            <div v-else-if="item.child.cz2[index].type === 4">{{ item.child.cz2[index].value }}</div>
+            <el-radio-group v-else v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
+              <el-radio label="是" @click.native.prevent="radioChange('是', item.child.cz2[index], 'value', item.child.cz2, [1, 2])" />
+              <el-radio label="否" @click.native.prevent="radioChange('否', item.child.cz2[index], 'value', item.child.cz2, [1, 2])" />
             </el-radio-group>
           </td>
         </tr>
@@ -276,20 +290,38 @@ export default {
         }
       }
     },
-    radioChange(val, obj, val2) {
+    radioChange(val, obj, val2, obj1, fieldIndex) {
+      // 如果选择了否，禁用健康医保卡使用人次field10 disabled
       if (val === obj[val2]) {
         this.$set(obj, val2, '')
+        this.$set(obj1[fieldIndex[0]], 'disabled', false)
         return
       }
+      if (val === '否') {
+        this.$set(obj1[fieldIndex[0]], 'disabled', true)
+        this.$set(obj1[fieldIndex[0]], 'value', '')
+        this.$set(obj1[fieldIndex[1]], 'value', '')
+      } else {
+        this.$set(obj1[fieldIndex[0]], 'disabled', false)
+      }
       this.$set(obj, val2, val)
+    },
+    inputChange(val, item, obj, fieldIndex) {
+      // 监听type=0 改变事件
+      // 健康医保卡使用人次输入框改变， 计算健康医保卡使用占就诊人次比例
+      console.log('val', val)
+      console.log('item', item)
+      console.log('obj', obj)
+      console.log('fieldIndex', fieldIndex)
+      if (item.rowName === '健康医保卡使用人次') {
+        const ratio = (Number(val) * 100 / 100).toFixed(2) + '%'
+        this.$set(obj[fieldIndex], 'value', ratio)
+      }
     },
     async loginOut() {
       // 退出
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login`)
-    },
-    radioGroupChange(val, obj) {
-      // 如果选择了否，禁用健康医保卡使用人次field10
     },
     verifyData(param) {
       const verify = ['2018', '2019']

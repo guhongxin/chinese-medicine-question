@@ -28,19 +28,31 @@ export const questionnaireContent = [{
       { type: 0, value: '' }
     ]
   }
-}, {
-  name: '健康',
-  child: {
-    mm: ['是否实现“两卡融合”'],
-    cz1: [{ type: 2, value: '', options: ['是', '否'] }],
-    cz2: [{ type: 2, value: '', options: ['是', '否'] }]
-  }
-}, {
+},
+// {
+//   name: '健康',
+//   child: {
+//     mm: ['是否实现“两卡融合”'],
+//     cz1: [{ type: 2, value: '', options: ['是', '否'] }],
+//     cz2: [{ type: 2, value: '', options: ['是', '否'] }]
+//   }
+// },
+{
   name: '医保卡',
   child: {
-    mm: ['健康医保卡使用人次', '健康医保卡使用占就诊人次比例（%）'],
-    cz1: [{ type: 0, value: '' }, { type: 0, value: '' }],
-    cz2: [{ type: 0, value: '' }, { type: 0, value: '' }]
+    mm: ['是否实现“两卡融合”', '健康医保卡使用人次', '健康医保卡使用占就诊人次比例（%）'],
+    cz1: [
+      { type: 2, value: '', options: ['是', '否'] },
+      { type: 0, value: '', rowName: '健康医保卡使用人次' },
+      { type: 4, value: '' }
+      // { type: 0, value: '' }
+    ],
+    cz2: [
+      { type: 2, value: '', options: ['是', '否'] },
+      { type: 0, value: '', rowName: '健康医保卡使用人次' },
+      { type: 4, value: '' }
+      // { type: 0, value: '' }
+    ]
   }
 }, {
   name: '现场排队',
