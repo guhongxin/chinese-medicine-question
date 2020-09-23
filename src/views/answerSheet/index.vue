@@ -95,7 +95,7 @@
 <script>
 import baseInforDailog from './popup/baseInforDailog'
 import { questionnaireContent } from '@/utils/questionnaireData.js'
-import { questionnairegetQn, questionnaireSaveQn } from '@/api/usergl'
+import { questionnairegetQn, questionnaireSaveQn, organizationGetOz } from '@/api/usergl'
 import { getCookie } from '@/utils/auth'
 export default {
   components: {
@@ -106,11 +106,15 @@ export default {
       tabData: questionnaireContent,
       loading0: false,
       loading1: false,
-      questionEditStatus: true // true 编辑状态 false 禁用编辑
+      questionEditStatus: true, // true 编辑状态 false 禁用编辑
+      annualOutpatientNum: 0
     }
   },
   mounted() {
     this.userId = getCookie('userId')
+    this.organizationGetOzApi({
+      userId: this.userId
+    })
     this.questionnairegetQnApi()
   },
   methods: {
@@ -309,13 +313,9 @@ export default {
     inputChange(val, item, obj, fieldIndex) {
       // 监听type=0 改变事件
       // 健康医保卡使用人次输入框改变， 计算健康医保卡使用占就诊人次比例
-      console.log('val', val)
-      console.log('item', item)
-      console.log('obj', obj)
-      console.log('fieldIndex', fieldIndex)
       if (item.rowName === '健康医保卡使用人次') {
-        const ratio = (Number(val) * 100 / 100).toFixed(2) + '%'
-        this.$set(obj[fieldIndex], 'value', ratio)
+        const ratio = this.annualOutpatientNum ? (Number(val) * 100 / this.annualOutpatientNum).toFixed(2) : 0
+        this.$set(obj[fieldIndex], 'value', `${ratio}%`)
       }
     },
     async loginOut() {
@@ -426,6 +426,15 @@ export default {
         message: `${msg},请重新填写问卷！`
       })
       return false
+    },
+    organizationGetOzApi(param) {
+      // 获取机构信息
+      organizationGetOz(param).then(res => {
+        const data = res.data
+        this.annualOutpatientNum = Number(data.organization.annual_outpatient_num || '0')
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }
