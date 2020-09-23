@@ -231,9 +231,37 @@ export default {
               } else {
                 _list[0] = ''
               }
-              _list[1] = questionnaireContent[i].child.mm[j]
-              _list[2] = content ? content['2018']['field' + itemIndex] : ''
-              _list[3] = content ? content['2019']['field' + itemIndex] : ''
+              if (questionnaireContent[i].child.mm[j] === '不同范围的平均配送送达时间') {
+                _list[1] = questionnaireContent[i].child.mm[j]
+                const _childcz1 = questionnaireContent[i].child.cz1[j].child
+                const _valuecz1 = content ? content['2018']['field' + itemIndex] : ''
+                const _valueArrcz1 = _valuecz1.split(',')
+                let resultcz1 = ''
+                for (let kkmm1 = 0; kkmm1 < _valueArrcz1.length; kkmm1++) {
+                  if (_valueArrcz1[kkmm1]) {
+                    resultcz1 = `${_childcz1[kkmm1].qzLable}${_valueArrcz1[kkmm1]}${_childcz1[kkmm1].unit}`
+                  }
+                }
+                _list[2] = resultcz1.replace(/,$/g, '')
+
+                const _childcz2 = questionnaireContent[i].child.cz2[j].child
+                const _valuecz2 = content ? content['2019']['field' + itemIndex] : ''
+                const _valueArrcz2 = _valuecz2.split(',')
+                let resultcz2 = ''
+                for (let kkmm2 = 0; kkmm2 < _valueArrcz2.length; kkmm2++) {
+                  if (_valueArrcz2[kkmm2]) {
+                    resultcz2 = `${_childcz2[kkmm2].qzLable}${_valueArrcz2[kkmm2]}${_childcz2[kkmm2].unit}`
+                  }
+                }
+                _list[3] = resultcz2.replace(/,$/g, '')
+              } else {
+                _list[1] = questionnaireContent[i].child.mm[j]
+                _list[2] = content ? content['2018']['field' + itemIndex].replace(/,$/g, '') : ''
+                _list[3] = content ? content['2019']['field' + itemIndex].replace(/,$/g, '') : ''
+              }
+              // _list[1] = questionnaireContent[i].child.mm[j]
+              // _list[2] = content ? content['2018']['field' + itemIndex] : ''
+              // _list[3] = content ? content['2019']['field' + itemIndex] : ''
               itemIndex++
               list.push(_list)
             }
