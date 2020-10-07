@@ -131,6 +131,7 @@ import baseInforDailog from './popup/baseInforDailog'
 import { questionnaireContent } from '@/utils/questionnaireData.js'
 import { questionnairegetQn, questionnaireSaveQn, organizationGetOz } from '@/api/usergl'
 import { getCookie } from '@/utils/auth'
+// import { constantRoutes } from '@/router'
 export default {
   components: {
     baseInforDailog
@@ -393,6 +394,26 @@ export default {
       if (item.rowName === '健康医保卡使用人次') {
         const ratio = this.annualOutpatientNum ? (Number(val) * 100 / this.annualOutpatientNum).toFixed(2) : 0
         this.$set(obj[fieldIndex], 'value', `${ratio}%`)
+      }
+      // 计算网上预约人数总和
+      if (item.rowName === '网上预约人次数') {
+        const total = Number(obj['5']['value']) + Number(obj['7']['value'])
+        this.$set(obj['3'], 'value', total)
+      }
+      // 计算门诊智慧结算笔数总和
+      if (item.rowName === '门诊智慧结算笔数') {
+        const total = Number(obj['4']['value']) + Number(obj['5']['value'])
+        this.$set(obj['3'], 'value', total)
+      }
+      // 计算病房智慧结算笔数总和
+      if (item.rowName === '病房智慧结算笔数') {
+        const total = Number(obj['4']['value']) + Number(obj['5']['value'])
+        this.$set(obj['3'], 'value', total)
+      }
+      // 计算病房智慧结算笔数总和
+      if (item.rowName === '检查智慧预约人次数') {
+        const total = Number(obj['3']['value']) + Number(obj['4']['value']) + Number(obj['5']['value'])
+        this.$set(obj['2'], 'value', total)
       }
     },
     async loginOut() {

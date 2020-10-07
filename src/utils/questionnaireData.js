@@ -9,22 +9,22 @@ export const questionnaireContent = [{
       { type: 0, value: '' },
       { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
       { type: 2, value: '', options: ['是', '否'] },
+      { type: 4, value: '' },
       { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' }
     ],
     cz2: [
       { type: 0, value: '' },
       { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
       { type: 2, value: '', options: ['是', '否'] },
+      { type: 4, value: '' },
       { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' }
     ]
   }
@@ -71,18 +71,18 @@ export const questionnaireContent = [{
       { type: 2, value: '', options: ['是', '否'] },
       { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
       { type: 0, value: '' }
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
       { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
       { type: 0, value: '' }
     ]
   }
@@ -96,18 +96,18 @@ export const questionnaireContent = [{
       { type: 2, value: '', options: ['是', '否'] },
       { type: 1, value: [], options: ['自助结算', '病区（床边）结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
       { type: 0, value: '' }
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
       { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
       { type: 0, value: '' }
     ]
   }
@@ -156,10 +156,10 @@ export const questionnaireContent = [{
     cz1: [
       { type: 2, value: '', options: ['是', '否'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询', '其它'] }
@@ -167,10 +167,10 @@ export const questionnaireContent = [{
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询', '其它'] }
