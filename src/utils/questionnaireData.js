@@ -460,7 +460,7 @@ export const scoreContent = [{
   name: '发票自助打印率',
   cz1: '',
   cz2: '',
-  method: [30, 28]
+  method: [31, 28]
 }, {
   name: '检查智慧预约率',
   cz1: '',
