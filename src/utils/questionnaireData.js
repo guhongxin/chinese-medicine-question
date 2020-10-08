@@ -7,7 +7,7 @@ export const questionnaireContent = [{
     ],
     cz1: [
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
+      { type: 1, value: [], valueInput: '', options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
       { type: 2, value: '', options: ['是', '否'], rowName: '门诊预约' },
       { type: 4, value: '' },
       { type: 0, value: '' },
@@ -18,7 +18,7 @@ export const questionnaireContent = [{
     ],
     cz2: [
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
+      { type: 1, value: [], valueInput: '', options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
       { type: 2, value: '', options: ['是', '否'], rowName: '门诊预约' },
       { type: 4, value: '' },
       { type: 0, value: '' },

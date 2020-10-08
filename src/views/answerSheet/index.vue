@@ -27,13 +27,16 @@
               size="small"
               @change="(val) => inputChange(val, item.child.cz1[index], item.child.cz1, 2)"
             />
-            <el-checkbox-group v-else-if="item.child.cz1[index].type === 1" v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
-              <el-checkbox
-                v-for="(option, key1) in item.child.cz1[index].options"
-                :key="key1"
-                :label="option"
-              />
-            </el-checkbox-group>
+            <template v-else-if="item.child.cz1[index].type === 1">
+              <el-checkbox-group v-model="item.child.cz1[index].value" :disabled="item.child.cz1[index].disabled">
+                <el-checkbox
+                  v-for="(option, key1) in item.child.cz1[index].options"
+                  :key="key1"
+                  :label="option"
+                />
+              </el-checkbox-group>
+              <el-input v-if="item.child.cz1[index].value.indexOf('其它') !== -1" v-model="item.child.cz1[index].valueInput" :disabled="item.child.cz1[index].disabled" size="small" style="margin-top: 5px;" />
+            </template>
             <template v-else-if="item.child.cz1[index].type === 3">
               <el-select v-model="item.child.cz1[index].value" placeholder="请选择" size="small" :disabled="item.child.cz1[index].disabled">
                 <el-option
@@ -76,13 +79,16 @@
               size="small"
               @change="(val) => inputChange(val, item.child.cz2[index], item.child.cz2, 2)"
             />
-            <el-checkbox-group v-else-if="item.child.cz2[index].type === 1" v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
-              <el-checkbox
-                v-for="(option, key1) in item.child.cz2[index].options"
-                :key="key1"
-                :label="option"
-              />
-            </el-checkbox-group>
+            <template v-else-if="item.child.cz2[index].type === 1">
+              <el-checkbox-group v-model="item.child.cz2[index].value" :disabled="item.child.cz2[index].disabled">
+                <el-checkbox
+                  v-for="(option, key1) in item.child.cz2[index].options"
+                  :key="key1"
+                  :label="option"
+                />
+              </el-checkbox-group>
+              <el-input v-if="item.child.cz2[index].value.indexOf('其它') !== -1" v-model="item.child.cz2[index].valueInput" :disabled="item.child.cz2[index].disabled" size="small" style="margin-top: 5px;" />
+            </template>
             <template v-else-if="item.child.cz2[index].type === 3">
               <el-select v-model="item.child.cz2[index].value" placeholder="请选择" size="small" :disabled="item.child.cz2[index].disabled">
                 <el-option
@@ -123,6 +129,9 @@
     <div v-if="questionEditStatus" class="footer">
       <el-button type="primary" class="w-btn" :loading="loading0" @click="temporaryStorage">暂存</el-button>
       <el-button type="primary" class="w-btn" :loading="loading1" @click="submite">提交</el-button>
+    </div>
+    <div v-if="questionEditStatus" class="zc-save" @click="temporaryStorage">
+      <img src="../../assets/img/save.png">
     </div>
   </div>
 </template>
@@ -194,8 +203,16 @@ export default {
         for (let j = 0; j < param[i]['child']['mm'].length; j++) {
           // 2018
           if (param[i]['child']['cz1'][j].type === 1) {
-            // 类型为1，多选
-            result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].value.join(',')
+            // 类型为1，多选判断是否选选中其它， 如果选中其它需要把其它替换成输入内容
+            const otherIndex = param[i]['child']['cz1'][j].value.findIndex(item => item === '其它')
+            if (otherIndex !== -1) {
+              const _checkValue = JSON.parse(JSON.stringify(param[i]['child']['cz1'][j].value))
+              _checkValue.splice(otherIndex, 1)
+              const _value = _checkValue.join(',') + ',' + param[i]['child']['cz1'][j].valueInput
+              result['2018']['field' + itemIndex] = _value.replace(/(^,|,$)/g, '')
+            } else {
+              result['2018']['field' + itemIndex] = param[i]['child']['cz1'][j].value.join(',')
+            }
           } else if (param[i]['child']['cz1'][j].type === 3) {
             // 下拉 选择不为其它，为下拉选项， 如果是其它 就取输入值
             if (param[i]['child']['cz1'][j].value !== '其它') {
@@ -214,8 +231,16 @@ export default {
           }
           // 2019
           if (param[i]['child']['cz2'][j].type === 1) {
-            // 类型为1，多选
-            result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].value.join(',')
+            // 类型为1，多选判断是否选选中其它， 如果选中其它需要把其它替换成输入内容
+            const otherIndex = param[i]['child']['cz2'][j].value.findIndex(item => item === '其它')
+            if (otherIndex !== -1) {
+              const _checkValue = JSON.parse(JSON.stringify(param[i]['child']['cz2'][j].value))
+              _checkValue.splice(otherIndex, 1)
+              const _value = _checkValue.join(',') + ',' + param[i]['child']['cz2'][j].valueInput
+              result['2019']['field' + itemIndex] = _value.replace(/(^,|,$)/g, '')
+            } else {
+              result['2019']['field' + itemIndex] = param[i]['child']['cz2'][j].value.join(',')
+            }
           } else if (param[i]['child']['cz2'][j].type === 3) {
             // 下拉 选择不为其它，为下拉选项， 如果是其它 就取输入值
             if (param[i]['child']['cz2'][j].value !== '其它') {
@@ -291,7 +316,27 @@ export default {
           // 2018
           if (targetData[i]['child']['cz1'][j].type === 1) {
             // 多选， 将字符串变成数组
-            targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex].split(',')
+            const _options = targetData[i]['child']['cz1'][j].options
+            const _value = sourceData['2018']['field' + itemIndex].split(',')
+            // 查找并集和交集 intersectionSet[0] 交集 intersectionSet[1] 差集
+            // 如果差集长度大于0 说明选中其它项 如果等于零说明未选中其它项
+            const intersectionSet = _value.reduce((total, item) => {
+              const has = _options.indexOf(item)
+              if (has !== -1) {
+                total[0].push(item)
+              } else {
+                if (item) {
+                  total[1].push(item)
+                }
+              }
+              return total
+            }, [[], []])
+            // 查找差集
+            if (intersectionSet[1].length > 0) {
+              intersectionSet[0].push('其它')
+            }
+            targetData[i]['child']['cz1'][j].value = intersectionSet[0]
+            targetData[i]['child']['cz1'][j].valueInput = intersectionSet[1].join(',')
           } else if (targetData[i]['child']['cz1'][j].type === 3) {
             // 下拉 判断值是否是其它
             const _options = JSON.parse(JSON.stringify(targetData[i]['child']['cz1'][j].options))
@@ -328,7 +373,27 @@ export default {
 
           if (targetData[i]['child']['cz2'][j].type === 1) {
             // 多选， 将字符串变成数组
-            targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex].split(',')
+            const _options = targetData[i]['child']['cz2'][j].options
+            const _value = sourceData['2019']['field' + itemIndex].split(',')
+            // 查找并集和交集 intersectionSet[0] 交集 intersectionSet[1] 差集
+            // 如果差集长度大于0 说明选中其它项 如果等于零说明未选中其它项
+            const intersectionSet = _value.reduce((total, item) => {
+              const has = _options.indexOf(item)
+              if (has !== -1) {
+                total[0].push(item)
+              } else {
+                if (item) {
+                  total[1].push(item)
+                }
+              }
+              return total
+            }, [[], []])
+            // 查找差集
+            if (intersectionSet[1].length > 0) {
+              intersectionSet[0].push('其它')
+            }
+            targetData[i]['child']['cz2'][j].value = intersectionSet[0]
+            targetData[i]['child']['cz2'][j].valueInput = intersectionSet[1].join(',')
           } else if (targetData[i]['child']['cz2'][j].type === 3) {
             // 下拉 判断值是否是其它
             const _options = JSON.parse(JSON.stringify(targetData[i]['child']['cz2'][j].options))
@@ -783,6 +848,24 @@ export default {
   }
   &>.div-row:not(:last-child) {
     border-bottom: 1px solid  #ebeef5;
+  }
+}
+.zc-save {
+  position: fixed;
+  width: 35px;
+  height: 35px;
+  background-color:#F4F5F5;
+  bottom: 50px;
+  left: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  img {
+    width: 20px;
+    height: 20px;
+    display: block;
   }
 }
 </style>
