@@ -256,8 +256,8 @@ export default {
                 _list[3] = resultcz2.replace(/,$/g, '')
               } else {
                 _list[1] = questionnaireContent[i].child.mm[j]
-                _list[2] = content ? content['2018']['field' + itemIndex].replace(/,$/g, '') : ''
-                _list[3] = content ? content['2019']['field' + itemIndex].replace(/,$/g, '') : ''
+                _list[2] = content ? (content['2018']['field' + itemIndex] + '').replace(/,$/g, '') : ''
+                _list[3] = content ? (content['2019']['field' + itemIndex] + '').replace(/,$/g, '') : ''
               }
               // _list[1] = questionnaireContent[i].child.mm[j]
               // _list[2] = content ? content['2018']['field' + itemIndex] : ''

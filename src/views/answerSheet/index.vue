@@ -182,7 +182,11 @@ export default {
         type: 'warning'
       }).then(() => {
         const _result = this.statisticalData(this.tabData)
-        this.verifyData(_result)
+        const isverifyData = this.verifyData(_result)
+        console.log('isverifyData', isverifyData)
+        if (!isverifyData) {
+          return false
+        }
         const obj = Object.assign({}, {
           userId: this.userId,
           status: '1'
@@ -599,22 +603,22 @@ export default {
       }
       // 计算网上预约人数总和
       if (item.rowName === '网上预约人次数') {
-        const total = Number(obj['5']['value']) + Number(obj['7']['value'])
+        const total = Number(obj['5']['value']) + Number(obj['7']['value']) + ''
         this.$set(obj['3'], 'value', total)
       }
       // 计算门诊智慧结算笔数总和
       if (item.rowName === '门诊智慧结算笔数') {
-        const total = Number(obj['4']['value']) + Number(obj['5']['value'])
+        const total = Number(obj['4']['value']) + Number(obj['5']['value']) + ''
         this.$set(obj['3'], 'value', total)
       }
       // 计算病房智慧结算笔数总和
       if (item.rowName === '病房智慧结算笔数') {
-        const total = Number(obj['4']['value']) + Number(obj['5']['value'])
+        const total = Number(obj['4']['value']) + Number(obj['5']['value']) + ''
         this.$set(obj['3'], 'value', total)
       }
       // 计算病房智慧结算笔数总和
       if (item.rowName === '检查智慧预约人次数') {
-        const total = Number(obj['3']['value']) + Number(obj['4']['value']) + Number(obj['5']['value'])
+        const total = Number(obj['3']['value']) + Number(obj['4']['value']) + Number(obj['5']['value']) + ''
         this.$set(obj['2'], 'value', total)
       }
     },
@@ -625,129 +629,157 @@ export default {
     },
     verifyData(param) {
       const verify = ['2018', '2019']
+      let result = true
       for (const key of verify) {
         const _data = param[key]
         if (Number(_data.field4) > Number(_data.field3)) {
           this.warnts('预约患者按时就诊人次数<=网上预约人次数')
+          result = false
           return false
         }
-        if (Number(_data.field3) !== Number(_data.field5) + Number(_data.field7)) {
-          this.warnts('网上预约人次数=网上预约专家号人次数+网上预约普通号人次数')
-          return false
-        }
+        // if (Number(_data.field3) !== Number(_data.field5) + Number(_data.field7)) {
+        //   this.warnts('网上预约人次数=网上预约专家号人次数+网上预约普通号人次数')
+        //   return false
+        // }
         if (Number(_data.field6) > Number(_data.field5)) {
           this.warnts('预约专家号的患者按时就诊人次数<=网上预约专家号人次数')
+          result = false
           return false
         }
         if (Number(_data.field6) > Number(_data.field7)) {
           this.warnts('预约普通号的患者按时就诊人次数<=网上预约普通号人次数')
+          result = false
           return false
         }
         if (Number(_data.field16) > Number(_data.field15)) {
           this.warnts('门诊智慧结算笔数<=门诊总结算笔数')
+          result = false
           return false
         }
-        if (Number(_data.field16) !== Number(_data.field17) + Number(_data.field18)) {
-          this.warnts('门诊智慧结算笔数=门诊诊间结算笔数+门诊自助结算笔数')
-          return false
-        }
+        // if (Number(_data.field16) !== Number(_data.field17) + Number(_data.field18)) {
+        //   this.warnts('门诊智慧结算笔数=门诊诊间结算笔数+门诊自助结算笔数')
+        //   return false
+        // }
         if (Number(_data.field19) > Number(_data.field15)) {
           this.warnts('门诊通过移动终端进行支付的结算笔数<=门诊总结算笔数')
+          result = false
           return false
         }
         if (Number(_data.field23) > Number(_data.field22)) {
           this.warnts('病房智慧结算笔数<=病房总结算笔数')
+          result = false
           return false
         }
-        if (Number(_data.field23) !== Number(_data.field24) + Number(_data.field25)) {
-          this.warnts('病房智慧结算笔数=病区（床边）结算笔数+病房自助结算笔数')
-          return false
-        }
+        // if (Number(_data.field23) !== Number(_data.field24) + Number(_data.field25)) {
+        //   this.warnts('病房智慧结算笔数=病区（床边）结算笔数+病房自助结算笔数')
+        //   return false
+        // }
         if (Number(_data.field24) > Number(_data.field23)) {
           this.warnts('病区（床边）结算笔数<=病房智慧结算笔数')
+          result = false
           return false
         }
         if (Number(_data.field25) > Number(_data.field23)) {
           this.warnts('病房自助结算笔数<=病房智慧结算笔数')
+          result = false
           return false
         }
         if (Number(_data.field26) > Number(_data.field23)) {
           this.warnts('病房通过移动终端进行支付的结算笔数<=病房智慧结算笔数')
+          result = false
           return false
         }
         if (Number(_data.field29) > Number(_data.field28)) {
           this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+          result = false
           return false
         }
         if (Number(_data.field30) > Number(_data.field28)) {
           this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+          result = false
           return false
         }
         if (Number(_data.field31) > Number(_data.field28)) {
           this.warnts('电子发票生成数<=发票总开票数（包括电子发票生成数）')
+          result = false
           return false
         }
         if (Number(_data.field37) > Number(_data.field36)) {
           this.warnts('检查智慧预约人次数<=检查预约人次数')
+          result = false
           return false
         }
-        if (Number(_data.field37) !== Number(_data.field38) + Number(_data.field39) + Number(_data.field40)) {
-          this.warnts('检查智慧预约人次数=检查诊间预约人次数+检查集中预约人次数+检查自助预约人次数')
-          return false
-        }
+        // if (Number(_data.field37) !== Number(_data.field38) + Number(_data.field39) + Number(_data.field40)) {
+        //   this.warnts('检查智慧预约人次数=检查诊间预约人次数+检查集中预约人次数+检查自助预约人次数')
+        //   return false
+        // }
         if (Number(_data.field38) > Number(_data.field37)) {
           this.warnts('检查诊间预约人次数<=检查智慧预约人次数')
+          result = false
           return false
         }
         if (Number(_data.field39) > Number(_data.field37)) {
           this.warnts('检查集中预约人次数<=检查智慧预约人次数')
+          result = false
           return false
         }
         if (Number(_data.field40) > Number(_data.field37)) {
           this.warnts('检查自助预约人次数<=检查智慧预约人次数')
+          result = false
           return false
         }
         if (Number(_data.field41) > Number(_data.field37)) {
           this.warnts('预约患者按时检查人次数<=检查智慧预约人次数')
+          result = false
           return false
         }
         if (Number(_data.field42) > Number(_data.field37)) {
           this.warnts('分时段检查预约人次数<=检查智慧预约人次数')
+          result = false
           return false
         }
         if (Number(_data.field61) > Number(_data.field5)) {
           this.warnts('名中医就诊人次数<=网上预约专家号人次数')
+          result = false
           return false
         }
         if (Number(_data.field60) > Number(_data.field61)) {
           this.warnts('网上预约名中医人次数<=名中医就诊人次数')
+          result = false
           return false
         }
         if (Number(_data.field62) > Number(_data.field60)) {
           this.warnts('预约名中医号的患者按时就诊人次数<=网上预约名中医人次数')
+          result = false
           return false
         }
         if (Number(_data.field63) > Number(_data.field60)) {
           this.warnts('名中医初诊病人人次数<=网上预约名中医人次数')
+          result = false
           return false
         }
         if (Number(_data.field74) > Number(_data.field73)) {
           this.warnts('开展中医远程国际会诊人次总数<=开展中医远程会诊人次总数')
+          result = false
           return false
         }
         if (Number(_data.field77) > Number(_data.field76)) {
           this.warnts('冬病夏治服务回访人次数<=开展冬病夏治服务总人次数')
+          result = false
           return false
         }
         if (Number(_data.field85) > Number(_data.field84)) {
           this.warnts('开展线上适宜技术推广项目总数<=开展适宜技术推广项目数')
+          result = false
           return false
         }
         if (Number(_data.field86) > Number(_data.field84)) {
           this.warnts('适宜技术推广回访总数<=开展适宜技术推广项目数')
+          result = false
           return false
         }
       }
+      return result
     },
     warnts(msg) {
       // 警告提示
