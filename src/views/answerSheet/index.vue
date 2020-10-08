@@ -168,6 +168,11 @@ export default {
     temporaryStorage() {
       // 暂存
       const _result = this.statisticalData(this.tabData)
+      const isverifyData = this.verifyData(_result)
+      console.log('isverifyData', isverifyData)
+      if (!isverifyData) {
+        return false
+      }
       const obj = Object.assign({}, {
         userId: this.userId,
         status: '0'
@@ -646,7 +651,7 @@ export default {
           result = false
           return false
         }
-        if (Number(_data.field6) > Number(_data.field7)) {
+        if (Number(_data.field8) > Number(_data.field7)) {
           this.warnts('预约普通号的患者按时就诊人次数<=网上预约普通号人次数')
           result = false
           return false
@@ -735,6 +740,16 @@ export default {
         }
         if (Number(_data.field42) > Number(_data.field37)) {
           this.warnts('分时段检查预约人次数<=检查智慧预约人次数')
+          result = false
+          return false
+        }
+        if (Number(_data.field53) > Number(_data.field52)) {
+          this.warnts('其中中医护理例数<=网上门诊服务例数')
+          result = false
+          return false
+        }
+        if (Number(_data.field56) > Number(_data.field52)) {
+          this.warnts('中医护理回访人次数<=网上门诊服务例数')
           result = false
           return false
         }
