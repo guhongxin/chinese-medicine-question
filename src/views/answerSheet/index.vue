@@ -376,15 +376,152 @@ export default {
       // 如果选择了否，禁用健康医保卡使用人次field10 disabled
       if (val === obj[val2]) {
         this.$set(obj, val2, '')
-        this.$set(obj1[fieldIndex[0]], 'disabled', false)
-        return
+        if (obj.rowName === '门诊预约') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+          this.$set(obj1[5], 'disabled', false)
+          this.$set(obj1[6], 'disabled', false)
+          this.$set(obj1[7], 'disabled', false)
+          this.$set(obj1[8], 'disabled', false)
+        }
+        if (obj.rowName === '浙里办健康医保卡') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+        }
+        if (obj.rowName === '门诊结算') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+          this.$set(obj1[5], 'disabled', false)
+          this.$set(obj1[6], 'disabled', false)
+        }
+        if (obj.rowName === '病房结算') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+          this.$set(obj1[5], 'disabled', false)
+          this.$set(obj1[6], 'disabled', false)
+        }
+        if (obj.rowName === '电子发票') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+        }
+        // this.$set(obj1[fieldIndex[0]], 'disabled', false)
+        return false
       }
       if (val === '否') {
-        this.$set(obj1[fieldIndex[0]], 'disabled', true)
-        this.$set(obj1[fieldIndex[0]], 'value', '')
-        this.$set(obj1[fieldIndex[1]], 'value', '')
+        if (obj.rowName === '门诊预约') {
+          // 门诊预约，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', true)
+          this.$set(obj1[3], 'disabled', true)
+          this.$set(obj1[4], 'disabled', true)
+          this.$set(obj1[5], 'disabled', true)
+          this.$set(obj1[6], 'disabled', true)
+          this.$set(obj1[7], 'disabled', true)
+          this.$set(obj1[8], 'disabled', true)
+          this.$set(obj1[1], 'value', [])
+          this.$set(obj1[3], 'value', '')
+          this.$set(obj1[4], 'value', '')
+          this.$set(obj1[5], 'value', '')
+          this.$set(obj1[6], 'value', '')
+          this.$set(obj1[7], 'value', '')
+          this.$set(obj1[8], 'value', '')
+        }
+        if (obj.rowName === '浙里办健康医保卡') {
+          this.$set(obj1[1], 'disabled', true)
+          this.$set(obj1[2], 'disabled', true)
+          this.$set(obj1[1], 'value', '')
+          this.$set(obj1[2], 'value', '')
+        }
+        if (obj.rowName === '门诊结算') {
+          // 门诊结算，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', true)
+          this.$set(obj1[2], 'disabled', true)
+          this.$set(obj1[3], 'disabled', true)
+          this.$set(obj1[4], 'disabled', true)
+          this.$set(obj1[5], 'disabled', true)
+          this.$set(obj1[6], 'disabled', true)
+          this.$set(obj1[1], 'value', [])
+          this.$set(obj1[2], 'value', '')
+          this.$set(obj1[3], 'value', '')
+          this.$set(obj1[4], 'value', '')
+          this.$set(obj1[5], 'value', '')
+          this.$set(obj1[6], 'value', '')
+        }
+        if (obj.rowName === '病房结算') {
+          // 门诊结算，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', true)
+          this.$set(obj1[2], 'disabled', true)
+          this.$set(obj1[3], 'disabled', true)
+          this.$set(obj1[4], 'disabled', true)
+          this.$set(obj1[5], 'disabled', true)
+          this.$set(obj1[6], 'disabled', true)
+          this.$set(obj1[1], 'value', [])
+          this.$set(obj1[2], 'value', '')
+          this.$set(obj1[3], 'value', '')
+          this.$set(obj1[4], 'value', '')
+          this.$set(obj1[5], 'value', '')
+          this.$set(obj1[6], 'value', '')
+        }
+        if (obj.rowName === '电子发票') {
+          // 门诊结算，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', true)
+          this.$set(obj1[2], 'disabled', true)
+          this.$set(obj1[3], 'disabled', true)
+          this.$set(obj1[4], 'disabled', true)
+          this.$set(obj1[1], 'value', '')
+          this.$set(obj1[2], 'value', '')
+          this.$set(obj1[3], 'value', '')
+          this.$set(obj1[4], 'value', '')
+        }
+        // this.$set(obj1[fieldIndex[0]], 'disabled', true)
+        // this.$set(obj1[fieldIndex[0]], 'value', '')
+        // this.$set(obj1[fieldIndex[1]], 'value', '')
       } else {
-        this.$set(obj1[fieldIndex[0]], 'disabled', false)
+        if (obj.rowName === '门诊预约') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+          this.$set(obj1[5], 'disabled', false)
+          this.$set(obj1[6], 'disabled', false)
+          this.$set(obj1[7], 'disabled', false)
+          this.$set(obj1[8], 'disabled', false)
+        }
+        if (obj.rowName === '浙里办健康医保卡') {
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+        }
+        if (obj.rowName === '门诊结算') {
+          // 门诊结算，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+          this.$set(obj1[5], 'disabled', false)
+          this.$set(obj1[6], 'disabled', false)
+        }
+        if (obj.rowName === '病房结算') {
+          // 病房结算，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+          this.$set(obj1[5], 'disabled', false)
+          this.$set(obj1[6], 'disabled', false)
+        }
+        if (obj.rowName === '电子发票') {
+          // 门诊结算，后面的6位不能选中
+          this.$set(obj1[1], 'disabled', false)
+          this.$set(obj1[2], 'disabled', false)
+          this.$set(obj1[3], 'disabled', false)
+          this.$set(obj1[4], 'disabled', false)
+        }
+        // this.$set(obj1[fieldIndex[0]], 'disabled', false)
       }
       this.$set(obj, val2, val)
     },
