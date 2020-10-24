@@ -146,8 +146,8 @@ export default {
                 _list[3] = resultcz2.replace(/,$/g, '')
               } else {
                 _list[1] = questionnaireContent[i].child.mm[j]
-                _list[2] = content ? content['2018']['field' + itemIndex].replace(/,$/g, '') : ''
-                _list[3] = content ? content['2019']['field' + itemIndex].replace(/,$/g, '') : ''
+                _list[2] = content ? (content['2018']['field' + itemIndex] + '').replace(/,$/g, '') : ''
+                _list[3] = content ? (content['2019']['field' + itemIndex] + '').replace(/,$/g, '') : ''
               }
               itemIndex++
               list.push(_list)
@@ -221,7 +221,7 @@ export default {
             }
             targetData[i]['child']['cz1'][j].value = result.replace(/,$/g, '')
           } else {
-            targetData[i]['child']['cz1'][j].value = sourceData['2018']['field' + itemIndex].replace(/,$/g, '')
+            targetData[i]['child']['cz1'][j].value = (sourceData['2018']['field' + itemIndex] + '').replace(/,$/g, '')
           }
           if (targetData[i]['child']['cz2'][j]['type'] === 5) {
             const _value = sourceData['2019']['field' + itemIndex]
@@ -235,7 +235,7 @@ export default {
             }
             targetData[i]['child']['cz2'][j].value = result.replace(/,$/g, '')
           } else {
-            targetData[i]['child']['cz2'][j].value = sourceData['2019']['field' + itemIndex].replace(/,$/g, '')
+            targetData[i]['child']['cz2'][j].value = (sourceData['2019']['field' + itemIndex] + '').replace(/,$/g, '')
           }
           itemIndex++
         }

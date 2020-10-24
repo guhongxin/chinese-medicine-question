@@ -7,24 +7,24 @@ export const questionnaireContent = [{
     ],
     cz1: [
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 1, value: [], valueInput: '', options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '门诊预约' },
+      { type: 4, value: '' },
       { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' }
     ],
     cz2: [
       { type: 0, value: '' },
-      { type: 1, value: [], options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 1, value: [], valueInput: '', options: ['网上预约', '电话预约', '诊间预约', '自助机预约', 'app预约', '公众号预约', '其它'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '门诊预约' },
+      { type: 4, value: '' },
       { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 0, value: '', rowName: '网上预约人次数' },
       { type: 0, value: '' }
     ]
   }
@@ -38,17 +38,17 @@ export const questionnaireContent = [{
 //   }
 // },
 {
-  name: '医保卡',
+  name: '浙里办健康医保卡',
   child: {
     mm: ['是否实现“两卡融合”', '健康医保卡使用人次', '健康医保卡使用占就诊人次比例（%）'],
     cz1: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '浙里办健康医保卡' },
       { type: 0, value: '', rowName: '健康医保卡使用人次' },
       { type: 4, value: '' }
       // { type: 0, value: '' }
     ],
     cz2: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '浙里办健康医保卡' },
       { type: 0, value: '', rowName: '健康医保卡使用人次' },
       { type: 4, value: '' }
       // { type: 0, value: '' }
@@ -68,46 +68,46 @@ export const questionnaireContent = [{
       '门诊诊间结算笔数', '门诊自助结算笔数', '门诊通过移动终端进行支付的结算笔数'
     ],
     cz1: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '门诊结算' },
       { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
       { type: 0, value: '' }
     ],
     cz2: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '门诊结算' },
       { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' },
       { type: 0, value: '' }
     ]
   }
 }, {
   name: '病房结算',
   child: {
-    mm: ['是否开展门诊智慧结算', '智慧结算方式', '病房总结算笔数', '病房智慧结算笔数',
+    mm: ['是否开展病房智慧结算', '智慧结算方式', '病房总结算笔数', '病房智慧结算笔数',
       '病区（床边）结算笔数', '病房自助结算笔数', '病房通过移动终端进行支付的结算笔数'
     ],
     cz1: [
-      { type: 2, value: '', options: ['是', '否'] },
-      { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '病房结算' },
+      { type: 1, value: [], options: ['自助结算', '病区（床边）结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
       { type: 0, value: '' }
     ],
     cz2: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '病房结算' },
       { type: 1, value: [], options: ['自助结算', '诊间结算', '移动终端结算'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
+      { type: 0, value: '', rowName: '病房智慧结算笔数' },
       { type: 0, value: '' }
     ]
   }
@@ -118,14 +118,14 @@ export const questionnaireContent = [{
       '发票自助打印数'
     ],
     cz1: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '电子发票' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' }
     ],
     cz2: [
-      { type: 2, value: '', options: ['是', '否'] },
+      { type: 2, value: '', options: ['是', '否'], rowName: '电子发票' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 0, value: '' },
@@ -156,10 +156,10 @@ export const questionnaireContent = [{
     cz1: [
       { type: 2, value: '', options: ['是', '否'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询', '其它'] }
@@ -167,10 +167,10 @@ export const questionnaireContent = [{
     cz2: [
       { type: 2, value: '', options: ['是', '否'] },
       { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
-      { type: 0, value: '' },
+      { type: 4, value: '' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
+      { type: 0, value: '', rowName: '检查智慧预约人次数' },
       { type: 0, value: '' },
       { type: 0, value: '' },
       { type: 1, value: [], options: ['APP查询', '网上查询', '公众号查询', '其它'] }
