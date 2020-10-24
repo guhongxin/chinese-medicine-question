@@ -389,7 +389,7 @@ export default {
     },
     inputChange(val, item, obj, fieldIndex) {
       // 监听type=0 改变事件
-      // 健康医保卡使用人次输入框改变， 计算健康医保卡使用占就诊人次比例
+      // 健康医保卡使用人次输入框改变， 计算健康医保卡使用占就诊人次比例 / 其中年门诊量
       if (item.rowName === '健康医保卡使用人次') {
         const ratio = this.annualOutpatientNum ? (Number(val) * 100 / this.annualOutpatientNum).toFixed(2) : 0
         this.$set(obj[fieldIndex], 'value', `${ratio}%`)
