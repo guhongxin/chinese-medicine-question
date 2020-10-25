@@ -613,7 +613,7 @@ export default {
       }
       // 计算门诊智慧结算笔数总和
       if (item.rowName === '门诊智慧结算笔数') {
-        const total = Number(obj['4']['value']) + Number(obj['5']['value']) + ''
+        const total = Number(obj['4']['value']) + Number(obj['5']['value']) + Number(obj['6']['value']) + ''
         this.$set(obj['3'], 'value', total)
       }
       // 计算病房智慧结算笔数总和

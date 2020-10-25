@@ -74,7 +74,7 @@ export const questionnaireContent = [{
       { type: 4, value: '' },
       { type: 0, value: '', rowName: '门诊智慧结算笔数' },
       { type: 0, value: '', rowName: '门诊智慧结算笔数' },
-      { type: 0, value: '' }
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' }
     ],
     cz2: [
       { type: 2, value: '', options: ['是', '否'], rowName: '门诊结算' },
@@ -83,7 +83,7 @@ export const questionnaireContent = [{
       { type: 4, value: '' },
       { type: 0, value: '', rowName: '门诊智慧结算笔数' },
       { type: 0, value: '', rowName: '门诊智慧结算笔数' },
-      { type: 0, value: '' }
+      { type: 0, value: '', rowName: '门诊智慧结算笔数' }
     ]
   }
 }, {
