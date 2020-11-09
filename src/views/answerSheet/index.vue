@@ -131,7 +131,9 @@
       <el-button type="primary" class="w-btn" :loading="loading1" @click="submite">提交</el-button>
     </div>
     <div v-if="questionEditStatus" class="zc-save" @click="temporaryStorage">
-      <img src="../../assets/img/save.png">
+      <el-tooltip class="item" effect="dark" content="暂存" placement="top">
+        <img src="../../assets/img/save.png">
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -758,21 +760,21 @@ export default {
           result = false
           return false
         }
-        if (Number(_data.field60) > Number(_data.field61)) {
-          this.warnts('网上预约名中医人次数<=名中医就诊人次数')
-          result = false
-          return false
-        }
+        // if (Number(_data.field60) > Number(_data.field61)) {
+        //   this.warnts('网上预约名中医人次数<=名中医就诊人次数')
+        //   result = false
+        //   return false
+        // }
         if (Number(_data.field62) > Number(_data.field60)) {
           this.warnts('预约名中医号的患者按时就诊人次数<=网上预约名中医人次数')
           result = false
           return false
         }
-        if (Number(_data.field63) > Number(_data.field60)) {
-          this.warnts('名中医初诊病人人次数<=网上预约名中医人次数')
-          result = false
-          return false
-        }
+        // if (Number(_data.field63) > Number(_data.field60)) {
+        //   this.warnts('名中医初诊病人人次数<=网上预约名中医人次数')
+        //   result = false
+        //   return false
+        // }
         if (Number(_data.field74) > Number(_data.field73)) {
           this.warnts('开展中医远程国际会诊人次总数<=开展中医远程会诊人次总数')
           result = false
@@ -784,12 +786,12 @@ export default {
           return false
         }
         if (Number(_data.field85) > Number(_data.field84)) {
-          this.warnts('开展线上适宜技术推广项目总数<=开展适宜技术推广项目数')
+          this.warnts('开展线上适宜技术推广项目总数<=开展适宜技术推广项目总数（线上，线下）')
           result = false
           return false
         }
         if (Number(_data.field86) > Number(_data.field84)) {
-          this.warnts('适宜技术推广回访总数<=开展适宜技术推广项目数')
+          this.warnts('适宜技术推广回访总数<=开展适宜技术推广项目总数（线上，线下）')
           result = false
           return false
         }
@@ -899,8 +901,8 @@ export default {
 }
 .zc-save {
   position: fixed;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   background-color:#F4F5F5;
   bottom: 50px;
   left: 50px;
@@ -910,8 +912,8 @@ export default {
   border-radius: 50%;
   cursor: pointer;
   img {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     display: block;
   }
 }
