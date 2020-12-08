@@ -4,7 +4,15 @@
       <div @click="seeBasicInfor">基本信息</div>
       <div class="login-out" @click="loginOut">[退出]</div>
     </div>
-    <div class="title">问卷</div>
+    <div class="title-box">
+      <div class="title">
+        问卷
+        <a href="../../../pdf/中医互联网指标说明.pdf" download="中医互联网指标说明.pdf" class="sms">
+          <i class="el-icon-download" />
+          问卷选项说明
+        </a>
+      </div>
+    </div>
     <baseInforDailog ref="baseInforDoc" />
     <table class="w-table" cellspacing="0" style="width:100%;">
       <tr>
@@ -823,11 +831,17 @@ export default {
   padding-top: 60px;
   margin: 0px auto 40px;
   position: relative;
+  .title-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .title {
     text-align: center;
     font-size: 18px;
     font-weight: 600;
     margin-bottom: 40px;
+    position: relative;
   }
   .basicinfor {
     color: #409EFF;
@@ -916,5 +930,14 @@ export default {
     height: 25px;
     display: block;
   }
+}
+.sms {
+  font-size: 12px;
+  margin: 0px 5px;
+  color: #409EFF;
+  position: absolute;
+  bottom: 0px;
+  right: -140px;
+  width: 140px;
 }
 </style>
