@@ -937,7 +937,7 @@ export default {
   color: #409EFF;
   position: absolute;
   bottom: 0px;
-  right: -140px;
+  right: -130px;
   width: 140px;
 }
 </style>
